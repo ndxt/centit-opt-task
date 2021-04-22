@@ -1,6 +1,5 @@
 package com.centit.task.po;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import com.centit.support.database.orm.GeneratorType;
 import com.centit.support.database.orm.ValueGenerator;
 import lombok.Data;
