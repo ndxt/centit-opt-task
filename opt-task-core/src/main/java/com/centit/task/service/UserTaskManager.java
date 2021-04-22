@@ -141,4 +141,10 @@ public interface UserTaskManager {
      * @param depute 委托明细
      */
     void userRoleDepute(RoleDepute depute);
+
+    /**
+     * 删除用户任务委托
+     * @param depute 委托明细
+     */
+    void deleteUserDepute(RoleDepute depute);
 }
