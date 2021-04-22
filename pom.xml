@@ -18,6 +18,7 @@
         <module>opt-task-client</module>
         <module>opt-task-module</module>
         <module>opt-task-core</module>
+        <module>centit-general-task</module>
     </modules>
 
 
