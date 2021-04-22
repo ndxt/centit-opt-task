@@ -24,7 +24,7 @@ public interface UserTaskManager {
     String createTask(UserTask userTask);
 
     /**
-     *
+     * 任务按时间到序排列
      * @param userCode 用户
      * @param offset 起始条目
      * @param maxsize 最到返回条目
@@ -33,13 +33,41 @@ public interface UserTaskManager {
     List<UserTask> listUserTask(String userCode, int offset, int maxsize);
 
     /**
-     *
+     * 任务按时间到序排列
      * @param filterMap 查询过滤条件
      * @param offset 起始条目
      * @param maxsize 最到返回条目
      * @return 用户任务列表
      */
     List<UserTask> listUserTask(Map<String, Object> filterMap, int offset, int maxsize);
+
+    /**
+     * 任务按时间到序排列
+     * @param userCode 用户
+     * @param offset 起始条目
+     * @param maxsize 最到返回条目
+     * @return 用户已完成任务列表
+     */
+    List<UserTask> listUserCompleteTask(String userCode, int offset, int maxsize);
+
+    /**
+     * 任务按时间到序排列
+     * @param filterMap 查询过滤条件
+     * @param offset 起始条目
+     * @param maxsize 最到返回条目
+     * @return 用户已完成任务列表
+     */
+    List<UserTask> listUserCompleteTask(Map<String, Object> filterMap, int offset, int maxsize);
+
+    /**
+     * 任务按时间到序排列
+     * @param osId 应用代码
+     * @param optId 业务代码
+     * @param optMethod 业务方法、节点
+     * @param optTag 业务主键
+     * @return 业务对应的代码
+     */
+    List<UserTask> listOptTask(String osId, String optId, String optMethod, String optTag);
 
     /**
      * 用户任务条目计数
@@ -55,6 +83,19 @@ public interface UserTaskManager {
      */
     Long countUserTask(Map<String, Object> filterMap);
 
+    /**
+     * 用户已完成任务条目计数
+     * @param userCode 用户代码
+     * @return 用户任务列表
+     */
+    Long countUserCompleteTask(String userCode);
+
+    /**
+     * 用户已完成任务条目计数
+     * @param filterMap 查询过滤条件
+     * @return 用户任务列表
+     */
+    Long countUserCompleteTask(Map<String, Object> filterMap);
     /**
      * 鉴权
      * @param taskId 任务
@@ -76,6 +117,14 @@ public interface UserTaskManager {
      * @param taskId 任务
      */
     void closeTask(String userCode, String taskId);
+
+    /**
+     * @param osId 应用代码
+     * @param optId 业务代码
+     * @param optMethod 业务方法、节点
+     * @param optTag 业务主键
+     */
+    void closeOptTask(String osId, String optId, String optMethod, String optTag);
 
     /**
      * 转移任务
