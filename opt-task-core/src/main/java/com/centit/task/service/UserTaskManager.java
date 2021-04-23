@@ -1,5 +1,6 @@
 package com.centit.task.service;
 
+import com.centit.support.database.utils.PageDesc;
 import com.centit.task.po.RoleDepute;
 import com.centit.task.po.UserTask;
 
@@ -17,50 +18,57 @@ import java.util.Map;
  */
 public interface UserTaskManager {
     /**
-     * 新建任务
+     * 新建或者修改任务
      * @param userTask 任务信息
      * @return 任务id
      */
-    String createTask(UserTask userTask);
+    String saveUserTask(UserTask userTask);
 
     /**
-     * 任务按时间到序排列
+     * 任务按时间倒序排列
      * @param userCode 用户
      * @param offset 起始条目
-     * @param maxsize 最到返回条目
+     * @param maxsize 最大返回条目
      * @return 用户任务列表
      */
     List<UserTask> listUserTask(String userCode, int offset, int maxsize);
 
     /**
-     * 任务按时间到序排列
+     * 任务按时间倒序排列
+     * @param filterMap 条件
+     * @return 用户任务列表
+     */
+    List<UserTask> listUserTask(Map<String, Object> filterMap, PageDesc pageDesc);
+
+    /**
+     * 任务按时间倒序排列
      * @param filterMap 查询过滤条件
      * @param offset 起始条目
-     * @param maxsize 最到返回条目
+     * @param maxsize 最大返回条目
      * @return 用户任务列表
      */
     List<UserTask> listUserTask(Map<String, Object> filterMap, int offset, int maxsize);
 
     /**
-     * 任务按时间到序排列
+     * 任务按时间倒序排列
      * @param userCode 用户
      * @param offset 起始条目
-     * @param maxsize 最到返回条目
+     * @param maxsize 最大返回条目
      * @return 用户已完成任务列表
      */
     List<UserTask> listUserCompleteTask(String userCode, int offset, int maxsize);
 
     /**
-     * 任务按时间到序排列
+     * 任务按时间倒序排列
      * @param filterMap 查询过滤条件
      * @param offset 起始条目
-     * @param maxsize 最到返回条目
+     * @param maxsize 最大返回条目
      * @return 用户已完成任务列表
      */
     List<UserTask> listUserCompleteTask(Map<String, Object> filterMap, int offset, int maxsize);
 
     /**
-     * 任务按时间到序排列
+     * 任务按时间倒序排列
      * @param osId 应用代码
      * @param optId 业务代码
      * @param optMethod 业务方法、节点
