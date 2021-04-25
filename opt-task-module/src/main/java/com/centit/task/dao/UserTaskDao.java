@@ -30,6 +30,7 @@ public class UserTaskDao extends BaseDaoImpl<UserTask, String> {
         filterField.put("roleCode", CodeBook.EQUAL_HQL_ID);
         filterField.put("taskState", CodeBook.EQUAL_HQL_ID);
         filterField.put(CodeBook.SELF_ORDER_BY, " assignTime desc ");
+        filterField.put(CodeBook.ORDER_BY_HQL_ID, " assignTime desc ");
         return filterField;
     }
 
@@ -42,7 +43,24 @@ public class UserTaskDao extends BaseDaoImpl<UserTask, String> {
      * @return 用户任务列表
      */
     public List<UserTask> listUserTask(String userCode, int offset, int maxsize) {
-        return this.listObjectsByFilter(" where USER_CODE = ? ORDER BY ASSIGN_TIME DESC limit ?,? ",
+        return this.listObjectsByFilter(" where TASK_STATE = 'A' USER_CODE = ? ORDER BY ASSIGN_TIME DESC limit ?,? ",
             new Object[]{userCode, offset, maxsize});
+    }
+
+    /**
+     * 任务按时间倒序排列
+     *
+     * @param userCode 用户
+     * @param offset   起始条目
+     * @param maxsize  最大返回条目
+     * @return 用户已完成任务列表
+     */
+    public List<UserTask> listUserCompleteTask(String userCode, int offset, int maxsize) {
+        return this.listObjectsByFilter(" where TASK_STATE = 'C' USER_CODE = ? ORDER BY ASSIGN_TIME DESC limit ?,? ",
+            new Object[]{userCode, offset, maxsize});
+    }
+
+    public Long countUserTask(Map<String, Object> filterMap) {
+        return Long.valueOf(this.countObject(filterMap));
     }
 }

@@ -2,7 +2,9 @@ package com.centit.task.po;
 
 import com.centit.support.database.orm.GeneratorType;
 import com.centit.support.database.orm.ValueGenerator;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Column;
@@ -17,6 +19,8 @@ import java.util.Date;
  * @author codefan@hotmail.com
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "F_TASK_TRANSFER")
 public class TaskTransfer implements java.io.Serializable {
