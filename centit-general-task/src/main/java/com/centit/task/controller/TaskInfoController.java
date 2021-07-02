@@ -26,7 +26,7 @@ import java.util.Map;
  */
 @Controller
 @Api(value = "任务信息", tags = "任务信息接口类")
-@RequestMapping("/opt/task")
+@RequestMapping("/general/task")
 @Slf4j
 public class TaskInfoController extends BaseController {
 

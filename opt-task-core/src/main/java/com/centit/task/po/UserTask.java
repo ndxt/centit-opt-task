@@ -3,7 +3,9 @@ package com.centit.task.po;
 import com.centit.framework.core.dao.DictionaryMap;
 import com.centit.support.database.orm.GeneratorType;
 import com.centit.support.database.orm.ValueGenerator;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Column;
@@ -16,10 +18,24 @@ import java.util.Date;
  * 用户任务表
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "F_USER_TASK")
 public class UserTask implements java.io.Serializable {
     private static final long serialVersionUID = 1L;
+
+    public UserTask(String osId) {
+        this.osId = osId;
+    }
+
+    public static UserTask create(){
+        return new UserTask();
+    }
+
+    public static UserTask createWF(){
+        return new UserTask("workflow");
+    }
 
     @Id
     @Column(name = "TASK_ID")

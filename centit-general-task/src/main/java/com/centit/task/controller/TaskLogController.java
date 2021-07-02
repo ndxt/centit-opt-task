@@ -26,7 +26,7 @@ import java.util.Map;
  */
 @Controller
 @Api(value = "任务日志", tags = "任务日志接口类")
-@RequestMapping("/opt/log")
+@RequestMapping("/general/log")
 @Slf4j
 public class TaskLogController extends BaseController {
 
