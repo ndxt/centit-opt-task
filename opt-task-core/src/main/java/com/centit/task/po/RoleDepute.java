@@ -15,6 +15,7 @@ import java.util.Date;
 /**
  * create by scaffold
  * 行政角色 委托信息
+ * 任务(角色)委托表
  * @author codefan@hotmail.com
  */
 @Data

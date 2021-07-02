@@ -1,5 +1,6 @@
 package com.centit.task.controller;
 
+import com.centit.framework.common.ResponseData;
 import com.centit.framework.core.controller.BaseController;
 import com.centit.framework.core.controller.WrapUpResponseBody;
 import com.centit.framework.core.dao.PageQueryResult;
@@ -38,6 +39,19 @@ public class UserTaskController extends BaseController {
     public String saveUserTask(@RequestBody UserTask userTask) {
         String taskId = userTaskManager.saveUserTask(userTask);
         return taskId;
+    }
+
+    @ApiOperation(value = "批量保存用户任务", notes = "批量保存用户任务")
+    @WrapUpResponseBody
+    @PostMapping(value = "/saveUserTaskList")
+    public ResponseData saveUserTaskList(@RequestBody List<UserTask> userTaskList) {
+        if (userTaskList == null || userTaskList.isEmpty()) {
+            return ResponseData.makeSuccessResponse();
+        }
+        for (UserTask userTask : userTaskList) {
+            userTaskManager.saveUserTask(userTask);
+        }
+        return ResponseData.makeSuccessResponse();
     }
 
 

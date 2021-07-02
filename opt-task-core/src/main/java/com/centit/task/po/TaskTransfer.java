@@ -16,6 +16,7 @@ import java.util.Date;
 /**
  * create by scaffold
  * 任务转移，直接修该 UserTaskInfo ,这儿值记录日志
+ * 任务转移表
  * @author codefan@hotmail.com
  */
 @Data

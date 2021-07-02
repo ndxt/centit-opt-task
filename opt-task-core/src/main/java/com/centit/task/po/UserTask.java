@@ -12,6 +12,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
 
+/**
+ * 用户任务表
+ */
 @Data
 @Entity
 @Table(name = "F_USER_TASK")

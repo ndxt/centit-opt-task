@@ -12,11 +12,14 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
 
+/**
+ * 任务日志表
+ */
 @Data
 @Entity
 @Table(name = "F_TASK_LOG")
 public class TaskLog implements java.io.Serializable {
-    private static final long serialVersionUID =  1L;
+    private static final long serialVersionUID = 1L;
 
     @Id
     @Column(name = "LOG_ID")
@@ -28,15 +31,15 @@ public class TaskLog implements java.io.Serializable {
     @Length(max = 32, message = "字段长度不能大于{max}")
     private String taskId;
 
-    @Column(name="LOG_CONTENT")
+    @Column(name = "LOG_CONTENT")
     @Length(max = 2048, message = "字段长度不能大于{max}")
     private String logContent;
 
     @Length(max = 1, message = "字段长度不能大于{max}")
-    @Column(name="LOG_TYPE")
+    @Column(name = "LOG_TYPE")
     private Date logType;
 
-    @Column(name="LOG_TIME")
+    @Column(name = "LOG_TIME")
     private Date logTime;
 
     @Column(name = "UNIT_CODE")
@@ -52,7 +55,7 @@ public class TaskLog implements java.io.Serializable {
     /**
      * 实际 工作量，小時
      */
-    @Column(name="WORKLOAD_HOURS")
+    @Column(name = "WORKLOAD_HOURS")
     private Date workloadHours;
 
 }
