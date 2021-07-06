@@ -1,8 +1,11 @@
 package com.centit.task.client.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.centit.framework.appclient.HttpReceiveJSON;
 import com.centit.framework.appclient.RestfulHttpRequest;
 import com.centit.support.database.utils.PageDesc;
+import com.centit.support.network.UrlOptUtils;
 import com.centit.task.po.RoleDepute;
 import com.centit.task.po.UserTask;
 import com.centit.task.service.UserTaskManager;
@@ -35,7 +38,15 @@ public class UserTaskClientImpl implements UserTaskManager {
         String returnJson = RestfulHttpRequest.jsonPost(appSession,
             "/opt/task", userTask);
         HttpReceiveJSON receiveJSON = HttpReceiveJSON.valueOfJson(returnJson);
-        return null;
+        return receiveJSON.getDataAsString();
+    }
+
+    @Override
+    public List<String> saveUserTaskList(List<UserTask> userTaskList) {
+        String returnJson = RestfulHttpRequest.jsonPost(appSession,
+            "/opt/task/saveUserTaskList", userTaskList);
+        HttpReceiveJSON receiveJSON = HttpReceiveJSON.valueOfJson(returnJson);
+        return receiveJSON.getDataAsArray("objList", String.class);
     }
 
     @Override
@@ -43,14 +54,30 @@ public class UserTaskClientImpl implements UserTaskManager {
         return null;
     }
 
+    /**
+     * 任务按时间倒序排列
+     *
+     * @param filterMap 条件
+     * @param pageDesc  分页
+     * @return 用户任务列表
+     */
     @Override
     public List<UserTask> listUserTask(Map<String, Object> filterMap, PageDesc pageDesc) {
-        return null;
+        HttpReceiveJSON receiveJSON = RestfulHttpRequest.getResponseData(appSession,
+            UrlOptUtils.appendParamsToUrl(
+                UrlOptUtils.appendParamsToUrl("/opt/task/listUserTask",
+                    filterMap), (JSONObject) JSON.toJSON(pageDesc)));
+        RestfulHttpRequest.checkHttpReceiveJSON(receiveJSON);
+        pageDesc.copy(receiveJSON.getDataAsObject("pageDesc", PageDesc.class));
+        return receiveJSON.getDataAsArray("objList", UserTask.class);
     }
 
     @Override
     public List<UserTask> listUserTask(Map<String, Object> filterMap, int offset, int maxsize) {
-        return null;
+        HttpReceiveJSON receiveJSON = RestfulHttpRequest.getResponseData(appSession,
+            UrlOptUtils.appendParamsToUrl(
+                "/opt/task/listUserTask/" + offset + "/" + maxsize, filterMap));
+        return receiveJSON.getDataAsArray("objList", UserTask.class);
     }
 
     @Override
@@ -135,6 +162,8 @@ public class UserTaskClientImpl implements UserTaskManager {
 
     @Override
     public UserTask getUserTaskById(String taskId) {
-        return null;
+        HttpReceiveJSON receiveJSON = RestfulHttpRequest.getResponseData(appSession,
+            "/opt/task/" + taskId);
+        return receiveJSON.getDataAsObject(UserTask.class);
     }
 }

@@ -16,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author liu_cc
@@ -44,6 +41,18 @@ public class UserTaskManagerImpl implements UserTaskManager {
         userTask.setAssignTime(new Date());
         userTaskDao.mergeObject(userTask);
         return userTask.getTaskId();
+    }
+
+    @Override
+    public List<String> saveUserTaskList(List<UserTask> userTaskList) {
+        if (userTaskList == null || userTaskList.isEmpty()) {
+            return null;
+        }
+        List<String> list = new ArrayList<>();
+        for (UserTask userTask : userTaskList) {
+            list.add(this.saveUserTask(userTask));
+        }
+        return list;
     }
 
     @Override
@@ -156,7 +165,7 @@ public class UserTaskManagerImpl implements UserTaskManager {
      */
     private void checkUserTask(String userCode, UserTask userTask) {
         if (userTask == null) {
-            throw new ObjectException("为获取到用户任务！");
+            throw new ObjectException("未获取到用户任务！");
         }
         if (userCode == null || !userCode.equals(userTask.getUserCode())) {
             throw new ObjectException("用户没有操作任务的权限！");

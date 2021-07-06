@@ -26,6 +26,12 @@ public interface UserTaskManager {
     String saveUserTask(UserTask userTask);
 
     /**
+     * 批量保存任务
+     * @param userTaskList
+     */
+    List<String> saveUserTaskList(List<UserTask> userTaskList);
+
+    /**
      * 任务按时间倒序排列
      *
      * @param userCode 用户
@@ -199,4 +205,6 @@ public interface UserTaskManager {
      * @param taskId 委托编码
      */
     UserTask getUserTaskById(String taskId);
+
+
 }

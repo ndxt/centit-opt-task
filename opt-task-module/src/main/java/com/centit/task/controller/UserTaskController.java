@@ -44,14 +44,8 @@ public class UserTaskController extends BaseController {
     @ApiOperation(value = "批量保存用户任务", notes = "批量保存用户任务")
     @WrapUpResponseBody
     @PostMapping(value = "/saveUserTaskList")
-    public ResponseData saveUserTaskList(@RequestBody List<UserTask> userTaskList) {
-        if (userTaskList == null || userTaskList.isEmpty()) {
-            return ResponseData.makeSuccessResponse();
-        }
-        for (UserTask userTask : userTaskList) {
-            userTaskManager.saveUserTask(userTask);
-        }
-        return ResponseData.makeSuccessResponse();
+    public List<String> saveUserTaskList(@RequestBody List<UserTask> userTaskList) {
+        return userTaskManager.saveUserTaskList(userTaskList);
     }
 
 
