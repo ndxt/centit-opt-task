@@ -89,7 +89,6 @@ public class TaskInfoServiceImpl implements TaskInfoService {
             updateMemoTaskLog(taskInfo, String.format(TASK_STATE_TEMPLATE,currentUserName,taskInfo.getTaskStateDes()));
         }
         if (isChange(taskInfo::getTaskOfficer, dbTaskInfo.getTaskOfficer())) {
-            //todo:需要限制只能转移到当前应用下
             String topUnit = WebOptUtils.getCurrentTopUnit(RequestThreadLocal.getLocalThreadWrapperRequest());
             IUserInfo userInfo = CodeRepositoryUtil.getUserInfoByCode(topUnit, taskInfo.getTaskOfficer());
             if (null == userInfo) {
