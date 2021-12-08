@@ -3,13 +3,11 @@ package com.centit.task.po;
 import com.centit.framework.core.dao.DictionaryMap;
 import com.centit.support.database.orm.GeneratorType;
 import com.centit.support.database.orm.ValueGenerator;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -37,9 +35,12 @@ public class TaskLog implements java.io.Serializable {
 
     @Length(max = 1, message = "字段长度不能大于{max}")
     @Column(name = "LOG_TYPE")
-    private Date logType;
+    @ApiModelProperty("日志类型，M:备注，R:日志")
+    private String logType;
 
     @Column(name = "LOG_TIME")
+    @Temporal(TemporalType.TIMESTAMP)
+    @ValueGenerator( strategy= GeneratorType.FUNCTION, value = "today()")
     private Date logTime;
 
     @Column(name = "UNIT_CODE")
@@ -53,9 +54,10 @@ public class TaskLog implements java.io.Serializable {
     private String userCode;
 
     /**
-     * 实际 工作量，小時
+     * 实际 工作量，分钟
      */
-    @Column(name = "WORKLOAD_HOURS")
-    private Date workloadHours;
+    @Column(name = "WORKLOAD")
+    @ApiModelProperty("本次工作耗时，单位分钟")
+    private Long workload;
 
 }

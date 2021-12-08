@@ -5,6 +5,7 @@ import com.centit.support.database.orm.GeneratorType;
 import com.centit.support.database.orm.ValueGenerator;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Column;
@@ -58,9 +59,13 @@ public class TaskInfo implements java.io.Serializable {
     /**
      * 评估 工作量，小時
      */
-    @Column(name = "WORKLOAD_HOURS")
-    @ApiModelProperty("评估 工作量，小時")
-    private Date workloadHours;
+    @Column(name = "WORKLOAD")
+    @ApiModelProperty("工作实际使用时间，单位分钟")
+    private Long workload;
+
+    @Column(name = "ESTIMATE_WORKLOAD")
+    @ApiModelProperty("评估 工作量，单位分钟")
+    private Long estimateWorkload;
     /**
      * 最后期限
      */
@@ -100,4 +105,41 @@ public class TaskInfo implements java.io.Serializable {
     @ApiModelProperty("操作方法:对应工作流中的节点")
     private String optMethod;
 
+    @Column(name = "TASK_STATE")
+    @Length(max = 1, message = "字段长度不能大于{max}")
+    @ApiModelProperty("任务状态 A:未开始 B:处理中 C:已完成 D:已关闭")
+    private String taskState;
+
+    @Column(name = "TASK_CLASS")
+    @Length(max = 1, message = "字段长度不能大于{max}")
+    @ApiModelProperty("任务类别 A:任务 B:问题")
+    private String taskClass;
+
+    @Column(name = "TASK_PRIORITY")
+    @Length(max = 1, message = "字段长度不能大于{max}")
+    @ApiModelProperty("优先级 A:细微 B:次要 C:一般 D:严重 E:致命")
+    private String taskPriority;
+
+    public String getTaskStateDes(){
+        if (StringUtils.isBlank(taskState)){
+            return "";
+        }
+        String taskStateDesc = "";
+        switch (taskState){
+            case "A":
+                taskStateDesc = "未开始";
+                break;
+            case "B":
+                taskStateDesc = "处理中";
+                break;
+            case "C":
+                taskStateDesc = "已完成";
+                break;
+                case "D":
+                    taskStateDesc = "已关闭";
+                 break;
+        }
+        return taskStateDesc;
+
+    }
 }

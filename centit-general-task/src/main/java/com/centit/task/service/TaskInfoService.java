@@ -18,4 +18,8 @@ public interface TaskInfoService {
     void saveTaskInfo(TaskInfo taskInfo);
 
     void deleteTaskInfoByCode(String taskId);
+
+    void updateTaskInfo(TaskInfo taskInfo);
+
+    void incrementWorkload(long increament,String taskId);
 }

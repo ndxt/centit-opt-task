@@ -1,5 +1,6 @@
 package com.centit.task.controller;
 
+import com.centit.framework.common.ResponseData;
 import com.centit.framework.core.controller.BaseController;
 import com.centit.framework.core.controller.WrapUpResponseBody;
 import com.centit.framework.core.dao.PageQueryResult;
@@ -9,6 +10,7 @@ import com.centit.task.service.TaskInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,9 +55,20 @@ public class TaskInfoController extends BaseController {
     @ApiOperation(value = "保存任务信息", notes = "保存任务信息")
     @WrapUpResponseBody
     @RequestMapping(method = RequestMethod.POST)
-    public TaskInfo saveFlowRole(@RequestBody TaskInfo taskInfo) {
+    public TaskInfo saveTaskInfo(@RequestBody TaskInfo taskInfo) {
         taskInfoService.saveTaskInfo(taskInfo);
         return taskInfo;
+    }
+
+    @ApiOperation(value = "修改任务信息", notes = "修改任务信息,同时会添加备注信息")
+    @WrapUpResponseBody
+    @RequestMapping(method = RequestMethod.PUT)
+    public ResponseData updateTaskInfo(@RequestBody TaskInfo taskInfo) {
+        if (StringUtils.isAnyBlank(taskInfo.getTaskId())){
+            return ResponseData.makeErrorMessage("taskId不能为空");
+        }
+        taskInfoService.updateTaskInfo(taskInfo);
+        return ResponseData.makeSuccessResponse();
     }
 
     @ApiOperation(value = "删除任务信息", notes = "删除任务信息")

@@ -3,6 +3,7 @@ package com.centit.task.service.impl;
 import com.centit.support.database.utils.PageDesc;
 import com.centit.task.dao.TaskLogDao;
 import com.centit.task.po.TaskLog;
+import com.centit.task.service.TaskInfoService;
 import com.centit.task.service.TaskLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class TaskLogServiceImpl implements TaskLogService {
     @Autowired
     private TaskLogDao TaskLogDao;
 
+    @Autowired
+    private TaskInfoService taskInfoService;
+
     @Override
     @Transactional
     public List<TaskLog> listTaskLogs(Map<String, Object> filterMap, PageDesc pageDesc) {
@@ -39,6 +43,9 @@ public class TaskLogServiceImpl implements TaskLogService {
     @Transactional
     public void saveTaskLog(TaskLog TaskLog) {
         TaskLogDao.mergeObject(TaskLog);
+        if (0!=TaskLog.getWorkload() && !"M".equals(TaskLog.getLogType())){
+            taskInfoService.incrementWorkload(TaskLog.getWorkload(),TaskLog.getTaskId());
+        }
     }
 
     @Override

@@ -54,7 +54,7 @@ CREATE TABLE F_TASK_INFO  (
   TASK_OFFICER varchar(32)  DEFAULT NULL COMMENT '任务分配人',
   TASK_REPORTER varchar(32)  DEFAULT NULL COMMENT '任务报告人',
   ASSIGN_TIME    datetime(0) NOT NULL COMMENT '分配时间',
-  WORKLOAD_HOURS datetime(0) NOT NULL COMMENT '评估 工作量，小時',
+  WORKLOAD bigint(20) NOT NULL COMMENT '评估 工作量，分钟',
   DEADLINE_TIME  datetime(0) NOT NULL COMMENT '最后期限',
   UNIT_CODE varchar(32)  DEFAULT NULL COMMENT '操作机构',
   USER_CODE varchar(32)  DEFAULT NULL COMMENT '操作用户',
@@ -73,7 +73,7 @@ CREATE TABLE F_TASK_LOG  (
   LOG_TIME    datetime(0) NOT NULL COMMENT '记录时间',
   UNIT_CODE varchar(32)  DEFAULT NULL COMMENT '操作机构',
   USER_CODE varchar(32)  DEFAULT NULL COMMENT '操作用户',
-  WORKLOAD_HOURS datetime(0) NOT NULL COMMENT '实际 工作量，小時',
+  WORKLOAD bigint(20) NOT NULL COMMENT '实际 工作量，分钟',
   PRIMARY KEY (LOG_ID)
 );
 ALTER TABLE F_TASK_LOG         comment '任务日志表';
