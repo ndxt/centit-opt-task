@@ -36,15 +36,20 @@ public class TaskInfoServiceImpl implements TaskInfoService {
     @Autowired
     private TaskLogDao taskLogDao;
 
-
+    /**
+     * 修改任务状态日志模板
+     */
     private final String TASK_STATE_TEMPLATE = "%s更改任务状态为%s";
 
+    /**
+     * 任务转移日志模板
+     */
     private final String TASK_TRANSFER_TEMPLATE = "%s把任务分配给%s";
 
     @Override
     @Transactional
     public List<TaskInfo> listTaskInfos(Map<String, Object> filterMap, PageDesc pageDesc) {
-        return taskInfoDao.listObjectsByProperties(filterMap, pageDesc);
+        return taskInfoDao.listObjects(filterMap, pageDesc);
     }
 
     @Override

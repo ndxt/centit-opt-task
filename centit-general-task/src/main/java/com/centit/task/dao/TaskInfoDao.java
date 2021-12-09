@@ -25,6 +25,18 @@ public class TaskInfoDao extends BaseDaoImpl<TaskInfo, String> {
     public Map<String, String> getFilterField() {
         Map<String, String> filterField = new HashMap<>();
         filterField.put("taskId", CodeBook.EQUAL_HQL_ID);
+        filterField.put("taskTitle", CodeBook.LIKE_HQL_ID);
+        filterField.put("taskContent", CodeBook.LIKE_HQL_ID);
+        filterField.put("taskOfficer", CodeBook.EQUAL_HQL_ID);
+        filterField.put("taskReporter", CodeBook.EQUAL_HQL_ID);
+        filterField.put("unitCode", CodeBook.EQUAL_HQL_ID);
+        filterField.put("userCode", CodeBook.EQUAL_HQL_ID);
+        filterField.put("osId", CodeBook.EQUAL_HQL_ID);
+        filterField.put("optId", CodeBook.EQUAL_HQL_ID);
+        filterField.put("optMethod", CodeBook.EQUAL_HQL_ID);
+        filterField.put("(splitforin)taskState", CodeBook.IN_HQL_ID);
+        filterField.put("(splitforin)taskClass", CodeBook.IN_HQL_ID);
+        filterField.put("(splitforin)taskPriority", CodeBook.IN_HQL_ID);
 
         return filterField;
     }
