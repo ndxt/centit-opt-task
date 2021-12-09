@@ -108,16 +108,19 @@ public class TaskInfo implements java.io.Serializable {
     @Column(name = "TASK_STATE")
     @Length(max = 1, message = "字段长度不能大于{max}")
     @ApiModelProperty("任务状态 A:未开始 B:处理中 C:已完成 D:已关闭")
+    @DictionaryMap(value = "taskState", fieldName = "taskStateText")
     private String taskState;
 
     @Column(name = "TASK_CLASS")
     @Length(max = 1, message = "字段长度不能大于{max}")
     @ApiModelProperty("任务类别 A:任务 B:问题")
+    @DictionaryMap(value = "taskClass", fieldName = "taskClassText")
     private String taskClass;
 
     @Column(name = "TASK_PRIORITY")
     @Length(max = 1, message = "字段长度不能大于{max}")
     @ApiModelProperty("优先级 A:细微 B:次要 C:一般 D:严重 E:致命")
+    @DictionaryMap(value = "taskPriority", fieldName = "taskPriorityText")
     private String taskPriority;
 
     public String getTaskStateDes(){

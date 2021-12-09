@@ -1,10 +1,11 @@
 package com.centit.task.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.centit.framework.common.ResponseData;
 import com.centit.framework.core.controller.BaseController;
 import com.centit.framework.core.controller.WrapUpResponseBody;
+import com.centit.framework.core.dao.DictionaryMapUtils;
 import com.centit.framework.core.dao.PageQueryResult;
 import com.centit.support.common.WorkTimeSpan;
 import com.centit.support.database.utils.PageDesc;
@@ -13,7 +14,6 @@ import com.centit.task.service.TaskInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -45,17 +45,17 @@ public class TaskInfoController extends BaseController {
     public PageQueryResult listAllTaskInfo(PageDesc pageDesc, HttpServletRequest request) {
         Map<String, Object> filterMap = BaseController.collectRequestParameters(request);
         List<TaskInfo> listObjects = taskInfoService.listTaskInfos(filterMap, pageDesc);
-        List<Map> maps = JSONArray.parseArray(JSON.toJSONString(listObjects), Map.class);
-        for (Map map : maps) {
+
+        JSONArray jsonArray = DictionaryMapUtils.objectsToJSONArray(listObjects);
+        for (Object object : jsonArray) {
+            JSONObject jsonObject = (JSONObject) object;
             WorkTimeSpan workTimeSpan = new WorkTimeSpan();
-            workTimeSpan.fromNumberAsMinute(MapUtils.getLong(map, "workload", 0L));
-            map.put("workloadMinute",workTimeSpan.toStringAsMinute());
-
-            workTimeSpan.fromNumberAsMinute(MapUtils.getLong(map, "estimateWorkload", 0L));
-            map.put("estimateWorkload",workTimeSpan.toStringAsMinute());
+            workTimeSpan.fromNumberAsMinute(jsonObject.getLongValue("workload"));
+            jsonObject.put("workloadMinute",workTimeSpan.toStringAsMinute());
+            workTimeSpan.fromNumberAsMinute(jsonObject.getLongValue("estimateWorkload"));
+            jsonObject.put("estimateWorkload",workTimeSpan.toStringAsMinute());
         }
-
-        return PageQueryResult.createResultMapDict(maps, pageDesc);
+        return PageQueryResult.createResultMapDict(jsonArray, pageDesc);
     }
 
     @ApiOperation(value = "查询单个任务信息", notes = "查询单个任务信息")

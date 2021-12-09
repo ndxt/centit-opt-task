@@ -91,6 +91,7 @@ public class TaskInfoServiceImpl implements TaskInfoService {
             throw new ObjectException("您未登录!");
         }
         if (isChange(taskInfo::getTaskState, dbTaskInfo.getTaskState())) {
+            //todo: taskInfo.getTaskStateDes() 从字典中获取
             updateMemoTaskLog(taskInfo, String.format(TASK_STATE_TEMPLATE,currentUserName,taskInfo.getTaskStateDes()));
         }
         if (isChange(taskInfo::getTaskOfficer, dbTaskInfo.getTaskOfficer())) {
