@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -57,6 +56,7 @@ public class TaskInfoServiceImpl implements TaskInfoService {
     @Override
     @Transactional
     public void saveTaskInfo(TaskInfo taskInfo) {
+        taskInfo.setWorkload(0L);
         taskInfoDao.mergeObject(taskInfo);
     }
 
@@ -85,7 +85,7 @@ public class TaskInfoServiceImpl implements TaskInfoService {
         if (StringUtils.isBlank(currentUserName)) {
             throw new ObjectException("您未登录!");
         }
-        if (isChange(taskInfo::getTaskState, taskInfo.getTaskState())) {
+        if (isChange(taskInfo::getTaskState, dbTaskInfo.getTaskState())) {
             updateMemoTaskLog(taskInfo, String.format(TASK_STATE_TEMPLATE,currentUserName,taskInfo.getTaskStateDes()));
         }
         if (isChange(taskInfo::getTaskOfficer, dbTaskInfo.getTaskOfficer())) {
@@ -94,7 +94,7 @@ public class TaskInfoServiceImpl implements TaskInfoService {
             if (null == userInfo) {
                 throw new ObjectException(taskInfo.getTaskOfficer() + " 用户不存在!");
             }
-            updateMemoTaskLog(taskInfo, String.format(TASK_TRANSFER_TEMPLATE,currentUserName,userInfo.getUserCode()));
+            updateMemoTaskLog(taskInfo, String.format(TASK_TRANSFER_TEMPLATE,currentUserName,userInfo.getUserName()));
         }
     }
 
@@ -116,7 +116,7 @@ public class TaskInfoServiceImpl implements TaskInfoService {
      * @return
      */
     private boolean isChange(Supplier<String> supplier, String oldValue) {
-        return StringUtils.isNotBlank(supplier.get()) && !oldValue.equals(supplier.get());
+        return StringUtils.isNotBlank(supplier.get()) && !supplier.get().equals(oldValue);
     }
 
 
