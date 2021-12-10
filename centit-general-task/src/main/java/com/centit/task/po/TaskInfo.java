@@ -123,26 +123,4 @@ public class TaskInfo implements java.io.Serializable {
     @DictionaryMap(value = "taskPriority", fieldName = "taskPriorityText")
     private String taskPriority;
 
-    public String getTaskStateDes(){
-        if (StringUtils.isBlank(taskState)){
-            return "";
-        }
-        String taskStateDesc = "";
-        switch (taskState){
-            case "A":
-                taskStateDesc = "未开始";
-                break;
-            case "B":
-                taskStateDesc = "处理中";
-                break;
-            case "C":
-                taskStateDesc = "已完成";
-                break;
-                case "D":
-                    taskStateDesc = "已关闭";
-                 break;
-        }
-        return taskStateDesc;
-
-    }
 }

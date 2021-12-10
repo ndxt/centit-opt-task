@@ -3,6 +3,7 @@ package com.centit.task.service.impl;
 import com.centit.framework.common.WebOptUtils;
 import com.centit.framework.components.CodeRepositoryUtil;
 import com.centit.framework.filter.RequestThreadLocal;
+import com.centit.framework.model.basedata.IDataDictionary;
 import com.centit.framework.model.basedata.IUserInfo;
 import com.centit.support.common.ObjectException;
 import com.centit.support.database.utils.PageDesc;
@@ -91,8 +92,8 @@ public class TaskInfoServiceImpl implements TaskInfoService {
             throw new ObjectException("您未登录!");
         }
         if (isChange(taskInfo::getTaskState, dbTaskInfo.getTaskState())) {
-            //todo: taskInfo.getTaskStateDes() 从字典中获取
-            updateMemoTaskLog(taskInfo, String.format(TASK_STATE_TEMPLATE,currentUserName,taskInfo.getTaskStateDes()));
+            IDataDictionary taskState = CodeRepositoryUtil.getDataPieceByValue("taskState", taskInfo.getTaskState());
+            updateMemoTaskLog(taskInfo, String.format(TASK_STATE_TEMPLATE,currentUserName,taskState));
         }
         if (isChange(taskInfo::getTaskOfficer, dbTaskInfo.getTaskOfficer())) {
             String topUnit = WebOptUtils.getCurrentTopUnit(RequestThreadLocal.getLocalThreadWrapperRequest());
