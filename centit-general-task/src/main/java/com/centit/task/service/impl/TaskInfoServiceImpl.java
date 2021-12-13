@@ -92,8 +92,9 @@ public class TaskInfoServiceImpl implements TaskInfoService {
             throw new ObjectException("您未登录!");
         }
         if (isChange(taskInfo::getTaskState, dbTaskInfo.getTaskState())) {
-            IDataDictionary taskState = CodeRepositoryUtil.getDataPieceByValue("taskState", taskInfo.getTaskState());
-            updateMemoTaskLog(taskInfo, String.format(TASK_STATE_TEMPLATE,currentUserName,taskState));
+            IDataDictionary taskStateDic = CodeRepositoryUtil.getDataPiece("taskState", taskInfo.getTaskState(), null);
+             String taskStateText = null == taskStateDic ? taskInfo.getTaskState() : taskStateDic.getDataValue();
+            updateMemoTaskLog(taskInfo, String.format(TASK_STATE_TEMPLATE,currentUserName,taskStateText));
         }
         if (isChange(taskInfo::getTaskOfficer, dbTaskInfo.getTaskOfficer())) {
             String topUnit = WebOptUtils.getCurrentTopUnit(RequestThreadLocal.getLocalThreadWrapperRequest());

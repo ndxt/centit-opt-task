@@ -40,7 +40,7 @@ public class TaskLogController extends BaseController {
         Map<String, Object> filterMap = BaseController.collectRequestParameters(request);
         List<TaskLog> listObjects = taskLogService.listTaskLogs(filterMap, pageDesc);
 
-        return PageQueryResult.createResult(listObjects, pageDesc);
+        return PageQueryResult.createResultMapDict(listObjects, pageDesc);
     }
 
     @ApiOperation(value = "查询单个任务日志", notes = "查询单个任务日志")
