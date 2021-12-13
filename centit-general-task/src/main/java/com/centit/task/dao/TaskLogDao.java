@@ -18,7 +18,14 @@ public class TaskLogDao extends BaseDaoImpl<TaskLog, String> {
     public Map<String, String> getFilterField() {
         Map<String, String> filterField = new HashMap<>();
         filterField.put("logId", CodeBook.EQUAL_HQL_ID);
-
+        filterField.put("taskId",CodeBook.EQUAL_HQL_ID);
+        filterField.put("logType",CodeBook.EQUAL_HQL_ID);
+        filterField.put("userCode",CodeBook.EQUAL_HQL_ID);
+        filterField.put("logContent",CodeBook.LIKE_HQL_ID);
+        //工作时间大于0
+        filterField.put("validWorkLoad"," WORKLOAD > 0  ");
+        //工作时间等于0
+        filterField.put("invalidWorkLoad"," WORKLOAD = 0 ");
         return filterField;
     }
 }

@@ -30,7 +30,7 @@ public class TaskLogServiceImpl implements TaskLogService {
     @Override
     @Transactional
     public List<TaskLog> listTaskLogs(Map<String, Object> filterMap, PageDesc pageDesc) {
-        return TaskLogDao.listObjectsByProperties(filterMap, pageDesc);
+        return TaskLogDao.listObjects(filterMap, pageDesc);
     }
 
     @Override
