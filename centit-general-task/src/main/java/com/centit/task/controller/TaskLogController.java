@@ -1,8 +1,12 @@
 package com.centit.task.controller;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.centit.framework.core.controller.BaseController;
 import com.centit.framework.core.controller.WrapUpResponseBody;
+import com.centit.framework.core.dao.DictionaryMapUtils;
 import com.centit.framework.core.dao.PageQueryResult;
+import com.centit.support.common.WorkTimeSpan;
 import com.centit.support.database.utils.PageDesc;
 import com.centit.task.po.TaskLog;
 import com.centit.task.service.TaskLogService;
@@ -36,11 +40,18 @@ public class TaskLogController extends BaseController {
     @ApiOperation(value = "任务日志列表", notes = "任务日志列表")
     @WrapUpResponseBody
     @RequestMapping(method = RequestMethod.GET)
-    public PageQueryResult<TaskLog> listAllTaskLog(PageDesc pageDesc, HttpServletRequest request) {
+    public PageQueryResult listAllTaskLog(PageDesc pageDesc, HttpServletRequest request) {
         Map<String, Object> filterMap = BaseController.collectRequestParameters(request);
         List<TaskLog> listObjects = taskLogService.listTaskLogs(filterMap, pageDesc);
 
-        return PageQueryResult.createResultMapDict(listObjects, pageDesc);
+        JSONArray jsonArray = DictionaryMapUtils.objectsToJSONArray(listObjects);
+        for (Object object : jsonArray) {
+            JSONObject jsonObject = (JSONObject) object;
+            WorkTimeSpan workTimeSpan = new WorkTimeSpan();
+            workTimeSpan.fromNumberAsMinute(jsonObject.getLongValue("workload"));
+            jsonObject.put("workloadMinute",workTimeSpan.toStringAsMinute());
+        }
+        return PageQueryResult.createResult(jsonArray, pageDesc);
     }
 
     @ApiOperation(value = "查询单个任务日志", notes = "查询单个任务日志")

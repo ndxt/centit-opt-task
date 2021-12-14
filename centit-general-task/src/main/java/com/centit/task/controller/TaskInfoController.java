@@ -55,7 +55,7 @@ public class TaskInfoController extends BaseController {
             workTimeSpan.fromNumberAsMinute(jsonObject.getLongValue("estimateWorkload"));
             jsonObject.put("estimateWorkloadMinute",workTimeSpan.toStringAsMinute());
         }
-        return PageQueryResult.createResultMapDict(jsonArray, pageDesc);
+        return PageQueryResult.createResult(jsonArray, pageDesc);
     }
 
     @ApiOperation(value = "查询单个任务信息", notes = "查询单个任务信息")
