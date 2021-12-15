@@ -51,9 +51,9 @@ public class TaskInfoController extends BaseController {
             JSONObject jsonObject = (JSONObject) object;
             WorkTimeSpan workTimeSpan = new WorkTimeSpan();
             workTimeSpan.fromNumberAsMinute(jsonObject.getLongValue("workload"));
-            jsonObject.put("workloadMinute",workTimeSpan.toStringAsMinute());
+            jsonObject.put("workloadMinute",workTimeSpan.toStringAsMinute().toLowerCase());
             workTimeSpan.fromNumberAsMinute(jsonObject.getLongValue("estimateWorkload"));
-            jsonObject.put("estimateWorkloadMinute",workTimeSpan.toStringAsMinute());
+            jsonObject.put("estimateWorkloadMinute",workTimeSpan.toStringAsMinute().toLowerCase());
         }
         return PageQueryResult.createResult(jsonArray, pageDesc);
     }

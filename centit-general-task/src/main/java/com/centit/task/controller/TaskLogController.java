@@ -49,7 +49,7 @@ public class TaskLogController extends BaseController {
             JSONObject jsonObject = (JSONObject) object;
             WorkTimeSpan workTimeSpan = new WorkTimeSpan();
             workTimeSpan.fromNumberAsMinute(jsonObject.getLongValue("workload"));
-            jsonObject.put("workloadMinute",workTimeSpan.toStringAsMinute());
+            jsonObject.put("workloadMinute",workTimeSpan.toStringAsMinute().toLowerCase());
         }
         return PageQueryResult.createResult(jsonArray, pageDesc);
     }
