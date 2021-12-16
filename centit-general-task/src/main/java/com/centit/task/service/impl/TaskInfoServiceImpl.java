@@ -84,7 +84,6 @@ public class TaskInfoServiceImpl implements TaskInfoService {
         if (!dbTaskInfo.getTaskReporter().equals(userCode)){
             throw new ObjectException("只有任务报告人才能删除任务");
         }
-        //todo:待测试
         //删除任务及相关日志信息
         taskLogDao.deleteObjectsByProperties(CollectionsOpt.createHashMap("taskId",dbTaskInfo.getTaskId()));
         taskInfoDao.deleteObjectById(taskId);
