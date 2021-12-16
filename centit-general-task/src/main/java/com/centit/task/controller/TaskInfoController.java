@@ -77,12 +77,7 @@ public class TaskInfoController extends BaseController {
     @WrapUpResponseBody
     @RequestMapping(method = RequestMethod.POST)
     public TaskInfo saveTaskInfo(@RequestBody TaskInfo taskInfo,HttpServletRequest request) {
-        String userCode = WebOptUtils.getCurrentUserCode(request);
-        if (StringUtils.isBlank(userCode)){
-            throw new ObjectException("您还未登录");
-        }
-        taskInfo.setUserCode(userCode);
-        taskInfo.setUnitCode(WebOptUtils.getCurrentTopUnit(request));
+        addUserInfoToTaskInfo(taskInfo, request);
         taskInfoService.saveTaskInfo(taskInfo);
         return taskInfo;
     }
@@ -94,11 +89,7 @@ public class TaskInfoController extends BaseController {
         if (StringUtils.isBlank(taskInfo.getTaskId())){
             return ResponseData.makeErrorMessage("taskId不能为空");
         }
-        String userCode = WebOptUtils.getCurrentUserCode(request);
-        if (StringUtils.isBlank(userCode)){
-            throw new ObjectException("您还未登录");
-        }
-        taskInfo.setUserCode(userCode);
+        addUserInfoToTaskInfo(taskInfo, request);
         taskInfoService.updateTaskInfo(taskInfo);
         return ResponseData.makeSuccessResponse();
     }
@@ -125,5 +116,19 @@ public class TaskInfoController extends BaseController {
         jsonObject.put("workloadMinute", workTimeSpan.toStringAsMinute().toLowerCase());
         workTimeSpan.fromNumberAsMinute(jsonObject.getLongValue("estimateWorkload"));
         jsonObject.put("estimateWorkloadMinute", workTimeSpan.toStringAsMinute().toLowerCase());
+    }
+
+    /**
+     * 在taskInfo中填充用户基本信息
+     * @param taskInfo
+     * @param request
+     */
+    private void addUserInfoToTaskInfo(TaskInfo taskInfo, HttpServletRequest request) {
+        String userCode = WebOptUtils.getCurrentUserCode(request);
+        if (StringUtils.isBlank(userCode)) {
+            throw new ObjectException("您还未登录");
+        }
+        taskInfo.setUserCode(userCode);
+        taskInfo.setUnitCode(WebOptUtils.getCurrentTopUnit(request));
     }
 }

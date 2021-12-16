@@ -98,19 +98,22 @@ public class TaskInfoServiceImpl implements TaskInfoService {
         }
         taskInfoDao.updateObject(taskInfo);
 
-        String currentUserName = WebOptUtils.getCurrentUserName(RequestThreadLocal.getLocalThreadWrapperRequest());
         if (isChange(taskInfo::getTaskState, dbTaskInfo.getTaskState())) {
+            IUserInfo currentUserInfo = CodeRepositoryUtil.getUserInfoByCode(taskInfo.getUnitCode(), taskInfo.getUserCode());
+            if (null == currentUserInfo){
+                throw new ObjectException("当前用户信息有误");
+            }
             IDataDictionary taskStateDic = CodeRepositoryUtil.getDataPiece("taskState", taskInfo.getTaskState(), null);
              String taskStateText = null == taskStateDic ? taskInfo.getTaskState() : taskStateDic.getDataValue();
-            updateMemoTaskLog(taskInfo, String.format(TASK_STATE_TEMPLATE,currentUserName,taskStateText));
+            updateMemoTaskLog(taskInfo, String.format(TASK_STATE_TEMPLATE,currentUserInfo.getUserName(),taskStateText));
         }
         if (isChange(taskInfo::getTaskOfficer, dbTaskInfo.getTaskOfficer())) {
-            String topUnit = WebOptUtils.getCurrentTopUnit(RequestThreadLocal.getLocalThreadWrapperRequest());
-            IUserInfo userInfo = CodeRepositoryUtil.getUserInfoByCode(topUnit, taskInfo.getTaskOfficer());
-            if (null == userInfo) {
+            IUserInfo newUserInfo = CodeRepositoryUtil.getUserInfoByCode(taskInfo.getUnitCode(), taskInfo.getTaskOfficer());
+            if (null == newUserInfo) {
                 throw new ObjectException(taskInfo.getTaskOfficer() + " 用户不存在!");
             }
-            updateMemoTaskLog(taskInfo, String.format(TASK_TRANSFER_TEMPLATE,currentUserName,userInfo.getUserName()));
+            IUserInfo dbUserInfo = CodeRepositoryUtil.getUserInfoByCode(dbTaskInfo.getUnitCode(), dbTaskInfo.getUserCode());
+            updateMemoTaskLog(taskInfo, String.format(TASK_TRANSFER_TEMPLATE,dbUserInfo.getUserName(),newUserInfo.getUserName()));
         }
     }
 
