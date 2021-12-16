@@ -2,10 +2,12 @@ package com.centit.task.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.centit.framework.common.WebOptUtils;
 import com.centit.framework.core.controller.BaseController;
 import com.centit.framework.core.controller.WrapUpResponseBody;
 import com.centit.framework.core.dao.DictionaryMapUtils;
 import com.centit.framework.core.dao.PageQueryResult;
+import com.centit.support.common.ObjectException;
 import com.centit.support.common.WorkTimeSpan;
 import com.centit.support.database.utils.PageDesc;
 import com.centit.task.po.TaskLog;
@@ -13,6 +15,7 @@ import com.centit.task.service.TaskLogService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -72,7 +75,11 @@ public class TaskLogController extends BaseController {
     @ApiOperation(value = "删除任务日志", notes = "删除任务日志")
     @WrapUpResponseBody
     @RequestMapping(value = "/{logId}", method = RequestMethod.DELETE)
-    public void deleteFlowRoleByCode(@PathVariable String logId) {
-        taskLogService.deleteTaskLogByCode(logId);
+    public void deleteFlowRoleByCode(@PathVariable String logId,HttpServletRequest request) {
+        String userCode = WebOptUtils.getCurrentUserCode(request);
+        if (StringUtils.isBlank(userCode)){
+            throw new ObjectException("您还未登录!");
+        }
+        taskLogService.deleteTaskLogByCode(logId,userCode);
     }
 }

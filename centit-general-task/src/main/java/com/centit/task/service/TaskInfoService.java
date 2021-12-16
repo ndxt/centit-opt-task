@@ -17,9 +17,11 @@ public interface TaskInfoService {
 
     void saveTaskInfo(TaskInfo taskInfo);
 
-    void deleteTaskInfoByCode(String taskId);
+    void deleteTaskInfoByCode(String taskId,String userCode);
 
     void updateTaskInfo(TaskInfo taskInfo);
 
-    void incrementWorkload(long increament,String taskId);
+    void incrementWorkload(long increment,String taskId);
+
+    void decrementWorkload(long decrement,String taskId);
 }

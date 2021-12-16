@@ -5,6 +5,7 @@ import com.centit.framework.components.CodeRepositoryUtil;
 import com.centit.framework.filter.RequestThreadLocal;
 import com.centit.framework.model.basedata.IDataDictionary;
 import com.centit.framework.model.basedata.IUserInfo;
+import com.centit.support.algorithm.CollectionsOpt;
 import com.centit.support.common.ObjectException;
 import com.centit.support.database.utils.PageDesc;
 import com.centit.task.dao.TaskInfoDao;
@@ -18,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -45,7 +45,12 @@ public class TaskInfoServiceImpl implements TaskInfoService {
     /**
      * 任务转移日志模板
      */
-    private final String TASK_TRANSFER_TEMPLATE = "%s把任务分配给%s";
+    private final String TASK_TRANSFER_TEMPLATE = "任务由%s转移到%s";
+
+    /**
+     * 任务创建日志模板
+     */
+    private final String TASK_CREATE_TEMPLATE = "%s创建了任务，并且把任务分配给了%s";
 
     @Override
     @Transactional
@@ -62,18 +67,26 @@ public class TaskInfoServiceImpl implements TaskInfoService {
     @Override
     @Transactional
     public void saveTaskInfo(TaskInfo taskInfo) {
+        IUserInfo taskOfficerInfo = CodeRepositoryUtil.getUserInfoByCode(taskInfo.getUnitCode(), taskInfo.getTaskOfficer());
+        if (null == taskOfficerInfo){
+            throw new ObjectException("任务分配人信息有误");
+        }
         taskInfo.setWorkload(0L);
         taskInfoDao.mergeObject(taskInfo);
+        IUserInfo reporterNameInfo = CodeRepositoryUtil.getUserInfoByCode(taskInfo.getUnitCode(), taskInfo.getTaskReporter());
+        updateMemoTaskLog(taskInfo,String.format(TASK_CREATE_TEMPLATE,reporterNameInfo.getUserName(),taskOfficerInfo.getUserName()));
     }
 
     @Override
     @Transactional
-    public void deleteTaskInfoByCode(String taskId) {
+    public void deleteTaskInfoByCode(String taskId,String userCode) {
         TaskInfo dbTaskInfo = taskInfoDao.getObjectById(taskId);
-        String userCode = WebOptUtils.getCurrentUserCode(RequestThreadLocal.getLocalThreadWrapperRequest());
         if (!dbTaskInfo.getTaskReporter().equals(userCode)){
             throw new ObjectException("只有任务报告人才能删除任务");
         }
+        //todo:待测试
+        //删除任务及相关日志信息
+        taskLogDao.deleteObjectsByProperties(CollectionsOpt.createHashMap("taskId",dbTaskInfo.getTaskId()));
         taskInfoDao.deleteObjectById(taskId);
     }
 
@@ -86,11 +99,7 @@ public class TaskInfoServiceImpl implements TaskInfoService {
         }
         taskInfoDao.updateObject(taskInfo);
 
-        HttpServletRequest request = RequestThreadLocal.getLocalThreadWrapperRequest();
-        String currentUserName = WebOptUtils.getCurrentUserName(request);
-        if (StringUtils.isBlank(currentUserName)) {
-            throw new ObjectException("您未登录!");
-        }
+        String currentUserName = WebOptUtils.getCurrentUserName(RequestThreadLocal.getLocalThreadWrapperRequest());
         if (isChange(taskInfo::getTaskState, dbTaskInfo.getTaskState())) {
             IDataDictionary taskStateDic = CodeRepositoryUtil.getDataPiece("taskState", taskInfo.getTaskState(), null);
              String taskStateText = null == taskStateDic ? taskInfo.getTaskState() : taskStateDic.getDataValue();
@@ -107,15 +116,23 @@ public class TaskInfoServiceImpl implements TaskInfoService {
     }
 
     /**
-     * WORKLOAD字段自增increament
+     * WORKLOAD字段自增increment
      *
-     * @param increament 增加数量
+     * @param increment 增加数量
      * @param taskId     任务id
      */
-    public void incrementWorkload(long increament, String taskId) {
-        taskInfoDao.incrementWorkload(increament, taskId);
+    public void incrementWorkload(long increment, String taskId) {
+        taskInfoDao.incrementWorkload(increment, taskId);
     }
 
+    /**
+     * WORKLOAD字段自减decrement
+     * @param increment 减少属性
+     * @param taskId 任务id
+     */
+    public void decrementWorkload(long increment, String taskId) {
+        taskInfoDao.decrementWorkload(increment, taskId);
+    }
     /**
      * 当supplier.get()未空或者不等于oldValue时 值为true，代表已改变
      *
@@ -138,6 +155,7 @@ public class TaskInfoServiceImpl implements TaskInfoService {
         taskLog.setTaskId(taskInfo.getTaskId());
         taskLog.setLogType("M");
         taskLog.setUserCode(taskInfo.getUserCode());
+        taskLog.setUnitCode(taskInfo.getUnitCode());
         taskLog.setWorkload(0L);
         taskLog.setLogContent(logContent);
         taskLogDao.saveNewObject(taskLog);

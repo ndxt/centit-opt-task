@@ -1,5 +1,6 @@
 package com.centit.task.service.impl;
 
+import com.centit.support.common.ObjectException;
 import com.centit.support.database.utils.PageDesc;
 import com.centit.task.dao.TaskLogDao;
 import com.centit.task.po.TaskLog;
@@ -22,7 +23,7 @@ import java.util.Map;
 public class TaskLogServiceImpl implements TaskLogService {
 
     @Autowired
-    private TaskLogDao TaskLogDao;
+    private TaskLogDao taskLogDao;
 
     @Autowired
     private TaskInfoService taskInfoService;
@@ -30,19 +31,19 @@ public class TaskLogServiceImpl implements TaskLogService {
     @Override
     @Transactional
     public List<TaskLog> listTaskLogs(Map<String, Object> filterMap, PageDesc pageDesc) {
-        return TaskLogDao.listObjects(filterMap, pageDesc);
+        return taskLogDao.listObjects(filterMap, pageDesc);
     }
 
     @Override
     @Transactional
     public TaskLog getTaskLogByCode(String logId) {
-        return TaskLogDao.getObjectById(logId);
+        return taskLogDao.getObjectById(logId);
     }
 
     @Override
     @Transactional
     public void saveTaskLog(TaskLog TaskLog) {
-        TaskLogDao.mergeObject(TaskLog);
+        taskLogDao.mergeObject(TaskLog);
         if (0!=TaskLog.getWorkload() && !"M".equals(TaskLog.getLogType())){
             taskInfoService.incrementWorkload(TaskLog.getWorkload(),TaskLog.getTaskId());
         }
@@ -50,8 +51,17 @@ public class TaskLogServiceImpl implements TaskLogService {
 
     @Override
     @Transactional
-    public void deleteTaskLogByCode(String logId) {
-        TaskLogDao.deleteObjectById(logId);
+    public void deleteTaskLogByCode(String logId,String userCode) {
+        //校验只能删除本人创建的日志
+        TaskLog taskLog = taskLogDao.getObjectById(logId);
+        if (null == taskLog){
+            throw new ObjectException("日志信息不存在!");
+        }
+        if (!taskLog.getLogType().equals("R") || !taskLog.getUserCode().equals(userCode)){
+            throw new ObjectException("只能删除自己的日志信息");
+        }
+        taskInfoService.decrementWorkload(taskLog.getWorkload(),taskLog.getTaskId());
+        taskLogDao.deleteObjectById(logId);
     }
 
 }

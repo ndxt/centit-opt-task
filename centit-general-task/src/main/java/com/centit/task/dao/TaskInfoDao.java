@@ -42,14 +42,26 @@ public class TaskInfoDao extends BaseDaoImpl<TaskInfo, String> {
     }
 
     /**
-     * WORKLOAD字段自增increament
-     * @param increament 增加数量
+     * WORKLOAD字段自增increment
+     * @param increment 增加数量
      * @param taskId 任务id
      */
     @Transactional
-    public void incrementWorkload(long increament,String taskId){
+    public void incrementWorkload(long increment,String taskId){
          DatabaseOptUtils.doExecuteSql(this, " UPDATE F_TASK_INFO SET WORKLOAD = WORKLOAD + ?  WHERE TASK_ID = ? ",
-             new Object[]{increament, taskId});
-        logger.info("incrementWorkload ：  UPDATE F_TASK_INFO SET WORKLOAD = WORKLOAD + ?  WHERE TASK_ID = ?  参数:{}, {} ",increament,taskId);
+             new Object[]{increment, taskId});
+        logger.info("incrementWorkload ：  UPDATE F_TASK_INFO SET WORKLOAD = WORKLOAD + ?  WHERE TASK_ID = ?  参数:{}, {} ",increment,taskId);
+    }
+
+    /**
+     * WORKLOAD字段自减decrement
+     * @param decrement 减少属性
+     * @param taskId 任务id
+     */
+    @Transactional
+    public void decrementWorkload(long decrement,String taskId){
+        DatabaseOptUtils.doExecuteSql(this, " UPDATE F_TASK_INFO SET WORKLOAD =  WORKLOAD - ?    WHERE TASK_ID = ? ",
+            new Object[]{decrement, taskId});
+        logger.info("decrementWorkload ：   UPDATE F_TASK_INFO SET WORKLOAD =  WORKLOAD - ?    WHERE TASK_ID = ?   参数:{}, {} ",decrement,taskId);
     }
 }

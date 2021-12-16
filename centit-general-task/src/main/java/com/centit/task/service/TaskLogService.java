@@ -17,5 +17,5 @@ public interface TaskLogService {
 
     void saveTaskLog(TaskLog taskLog);
 
-    void deleteTaskLogByCode(String logId);
+    void deleteTaskLogByCode(String logId,String userCode);
 }
