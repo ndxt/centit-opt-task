@@ -40,17 +40,17 @@ public class TaskInfoServiceImpl implements TaskInfoService {
     /**
      * 修改任务状态日志模板
      */
-    private final String TASK_STATE_TEMPLATE = "%s更改任务状态为%s";
+    private final String TASK_STATE_TEMPLATE = "%s更改任务状态为%s。";
 
     /**
      * 任务转移日志模板
      */
-    private final String TASK_TRANSFER_TEMPLATE = "任务由%s转移到%s";
+    private final String TASK_TRANSFER_TEMPLATE = "任务由%s从%s转移到%s。";
 
     /**
      * 任务创建日志模板
      */
-    private final String TASK_CREATE_TEMPLATE = "%s创建了任务，并且把任务分配给了%s";
+    private final String TASK_CREATE_TEMPLATE = "%s创建了任务，并且把任务分配给了%s。";
 
     @Override
     @Transactional
@@ -108,12 +108,14 @@ public class TaskInfoServiceImpl implements TaskInfoService {
             updateMemoTaskLog(taskInfo, String.format(TASK_STATE_TEMPLATE,currentUserInfo.getUserName(),taskStateText));
         }
         if (isChange(taskInfo::getTaskOfficer, dbTaskInfo.getTaskOfficer())) {
-            IUserInfo newUserInfo = CodeRepositoryUtil.getUserInfoByCode(taskInfo.getUnitCode(), taskInfo.getTaskOfficer());
-            if (null == newUserInfo) {
+            IUserInfo taskOfficerUserInfo = CodeRepositoryUtil.getUserInfoByCode(taskInfo.getUnitCode(), taskInfo.getTaskOfficer());
+            if (null == taskOfficerUserInfo) {
                 throw new ObjectException(taskInfo.getTaskOfficer() + " 用户不存在!");
             }
-            IUserInfo dbUserInfo = CodeRepositoryUtil.getUserInfoByCode(dbTaskInfo.getUnitCode(), dbTaskInfo.getUserCode());
-            updateMemoTaskLog(taskInfo, String.format(TASK_TRANSFER_TEMPLATE,dbUserInfo.getUserName(),newUserInfo.getUserName()));
+            IUserInfo dbUserInfo = CodeRepositoryUtil.getUserInfoByCode(dbTaskInfo.getUnitCode(), dbTaskInfo.getTaskOfficer());
+            IUserInfo taskInfoUserInfo = CodeRepositoryUtil.getUserInfoByCode(taskInfo.getUnitCode(), taskInfo.getUserCode());
+            String translateDes = String.format(TASK_TRANSFER_TEMPLATE, taskInfoUserInfo.getUserName(), dbUserInfo.getUserName(), taskOfficerUserInfo.getUserName());
+            updateMemoTaskLog(taskInfo,translateDes);
         }
     }
 
