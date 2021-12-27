@@ -50,6 +50,9 @@ public class TaskLogController extends BaseController {
         JSONArray jsonArray = DictionaryMapUtils.objectsToJSONArray(listObjects);
         for (Object object : jsonArray) {
             JSONObject jsonObject = (JSONObject) object;
+            if ("system".equals(jsonObject.getString("userCode"))){
+                jsonObject.put("userName","系统日志");
+            }
             WorkTimeSpan workTimeSpan = new WorkTimeSpan();
             workTimeSpan.fromNumberAsMinute(jsonObject.getLongValue("workload"));
             jsonObject.put("workloadMinute",workTimeSpan.toStringAsMinute().toLowerCase());
@@ -68,6 +71,9 @@ public class TaskLogController extends BaseController {
     @WrapUpResponseBody
     @RequestMapping(method = RequestMethod.POST)
     public TaskLog saveFlowRole(@RequestBody TaskLog taskLog) {
+        if (null == taskLog.getWorkload()){
+            taskLog.setWorkload(0L);
+        }
         taskLogService.saveTaskLog(taskLog);
         return taskLog;
     }

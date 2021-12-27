@@ -42,10 +42,10 @@ public class TaskLogServiceImpl implements TaskLogService {
 
     @Override
     @Transactional
-    public void saveTaskLog(TaskLog TaskLog) {
-        taskLogDao.mergeObject(TaskLog);
-        if (0!=TaskLog.getWorkload() && !"M".equals(TaskLog.getLogType())){
-            taskInfoService.incrementWorkload(TaskLog.getWorkload(),TaskLog.getTaskId());
+    public void saveTaskLog(TaskLog taskLog) {
+        taskLogDao.mergeObject(taskLog);
+        if (0!=taskLog.getWorkload() && !"M".equals(taskLog.getLogType())){
+            taskInfoService.incrementWorkload(taskLog.getWorkload(),taskLog.getTaskId());
         }
     }
 
