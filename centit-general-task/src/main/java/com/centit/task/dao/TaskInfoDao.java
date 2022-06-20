@@ -34,6 +34,7 @@ public class TaskInfoDao extends BaseDaoImpl<TaskInfo, String> {
         filterField.put("osId", CodeBook.EQUAL_HQL_ID);
         filterField.put("optId", CodeBook.EQUAL_HQL_ID);
         filterField.put("optMethod", CodeBook.EQUAL_HQL_ID);
+        filterField.put("topUnit", CodeBook.EQUAL_HQL_ID);
         filterField.put("(splitforin)taskState", CodeBook.IN_HQL_ID);
         filterField.put("(splitforin)taskClass", CodeBook.IN_HQL_ID);
         filterField.put("(splitforin)taskPriority", CodeBook.IN_HQL_ID);
