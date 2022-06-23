@@ -40,7 +40,7 @@ public class TaskLog implements java.io.Serializable {
 
     @Column(name = "LOG_TIME")
     @Temporal(TemporalType.TIMESTAMP)
-    @ValueGenerator( strategy= GeneratorType.FUNCTION, value = "today()")
+    @ValueGenerator(strategy = GeneratorType.FUNCTION, value = "today()")
     private Date logTime;
 
     @Column(name = "UNIT_CODE")
@@ -59,5 +59,10 @@ public class TaskLog implements java.io.Serializable {
     @Column(name = "WORKLOAD")
     @ApiModelProperty("本次工作耗时，单位分钟")
     private Long workload;
+
+    @Column(name = "OS_ID")
+    @Length(max = 32, message = "字段长度不能大于{max}")
+    @ApiModelProperty("业务系统id:等同于APPLICATION_ID,对应应用系统，比如工作流引擎workflow、考勤系统id")
+    private String osId;
 
 }

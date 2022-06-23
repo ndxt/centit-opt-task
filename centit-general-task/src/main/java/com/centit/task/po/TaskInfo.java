@@ -85,11 +85,6 @@ public class TaskInfo implements java.io.Serializable {
     @ApiModelProperty("操作用户")
     private String userCode;
 
-    @Column(name = "TOP_UNIT")
-    @Length(max = 32, message = "字段长度不能大于{max}")
-    @ApiModelProperty("租户id")
-    private String topUnit;
-
     @Column(name = "OS_ID")
     @Length(max = 32, message = "字段长度不能大于{max}")
     @ApiModelProperty("业务系统id:等同于APPLICATION_ID,对应应用系统，比如工作流引擎workflow、考勤系统id")

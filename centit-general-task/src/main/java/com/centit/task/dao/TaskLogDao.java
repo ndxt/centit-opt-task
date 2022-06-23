@@ -20,6 +20,7 @@ public class TaskLogDao extends BaseDaoImpl<TaskLog, String> {
         filterField.put("logId", CodeBook.EQUAL_HQL_ID);
         filterField.put("taskId",CodeBook.EQUAL_HQL_ID);
         filterField.put("logType",CodeBook.EQUAL_HQL_ID);
+        filterField.put("osId",CodeBook.EQUAL_HQL_ID);
         filterField.put("userCode",CodeBook.EQUAL_HQL_ID);
         filterField.put("logContent",CodeBook.LIKE_HQL_ID);
         //工作时间大于0
