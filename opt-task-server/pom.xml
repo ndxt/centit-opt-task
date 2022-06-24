@@ -5,7 +5,7 @@
     <parent>
         <artifactId>centit-opt-task</artifactId>
         <groupId>com.centit.product</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>5.2-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -33,11 +33,11 @@
             <artifactId>centit-ip-dubbo-client-config</artifactId>
             <version>${centit.framework.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.centit.product</groupId>
-            <artifactId>opt-task-module</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.centit.product</groupId>-->
+<!--            <artifactId>opt-task-module</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>io.springfox</groupId>
@@ -72,10 +72,10 @@
             <scope>runtime</scope>
         </dependency>
 
-        <dependency>
-            <groupId>com.centit.framework</groupId>
-            <artifactId>centit-ip-app-config</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.centit.framework</groupId>-->
+<!--            <artifactId>centit-ip-app-config</artifactId>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>com.centit.framework</groupId>

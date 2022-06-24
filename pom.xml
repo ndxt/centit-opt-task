@@ -13,11 +13,11 @@
     <groupId>com.centit.product</groupId>
     <artifactId>centit-opt-task</artifactId>
     <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>5.2-SNAPSHOT</version>
     <modules>
-        <module>opt-task-client</module>
-        <module>opt-task-module</module>
-        <module>opt-task-core</module>
+<!--        <module>opt-task-client</module>-->
+<!--        <module>opt-task-module</module>-->
+<!--        <module>opt-task-core</module>-->
         <module>centit-general-task</module>
         <module>opt-task-server</module>
     </modules>

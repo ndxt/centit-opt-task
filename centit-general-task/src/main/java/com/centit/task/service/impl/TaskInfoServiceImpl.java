@@ -1,8 +1,7 @@
 package com.centit.task.service.impl;
 
-import com.centit.framework.common.WebOptUtils;
+import com.alibaba.fastjson.JSONArray;
 import com.centit.framework.components.CodeRepositoryUtil;
-import com.centit.framework.filter.RequestThreadLocal;
 import com.centit.framework.model.basedata.IDataDictionary;
 import com.centit.framework.model.basedata.IUserInfo;
 import com.centit.support.algorithm.CollectionsOpt;
@@ -117,6 +116,7 @@ public class TaskInfoServiceImpl implements TaskInfoService {
      * @param increment 增加数量
      * @param taskId     任务id
      */
+    @Override
     public void incrementWorkload(long increment, String taskId) {
         taskInfoDao.incrementWorkload(increment, taskId);
     }
@@ -126,6 +126,7 @@ public class TaskInfoServiceImpl implements TaskInfoService {
      * @param increment 减少属性
      * @param taskId 任务id
      */
+    @Override
     public void decrementWorkload(long increment, String taskId) {
         taskInfoDao.decrementWorkload(increment, taskId);
     }
@@ -155,6 +156,7 @@ public class TaskInfoServiceImpl implements TaskInfoService {
         taskLog.setUnitCode(taskInfo.getUnitCode());
         taskLog.setWorkload(0L);
         taskLog.setLogContent(logContent);
+        taskLog.setOsId(taskInfo.getOsId());
         taskLogDao.saveNewObject(taskLog);
     }
 
@@ -204,5 +206,8 @@ public class TaskInfoServiceImpl implements TaskInfoService {
             updateMemoTaskLog(taskInfo,String.format(TASK_CONTENT_UPDATE_TEMPLATE, currentUserInfo.getUserName()));
         }
     }
-
+    @Override
+    public JSONArray statTaskInfo(Map<String,Object> filterMap){
+        return taskInfoDao.statTaskInfo(filterMap);
+    }
 }

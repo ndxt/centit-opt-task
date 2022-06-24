@@ -1,5 +1,6 @@
 package com.centit.task.service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.centit.support.database.utils.PageDesc;
 import com.centit.task.po.TaskInfo;
 
@@ -24,4 +25,6 @@ public interface TaskInfoService {
     void incrementWorkload(long increment,String taskId);
 
     void decrementWorkload(long decrement,String taskId);
+
+   JSONArray statTaskInfo(Map<String,Object> filterMap);
 }

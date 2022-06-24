@@ -51,8 +51,7 @@ public class TaskInfoController extends BaseController {
         JSONArray jsonArray = DictionaryMapUtils.objectsToJSONArray(listObjects);
         for (Object object : jsonArray) {
             JSONObject jsonObject = (JSONObject) object;
-            WorkTimeSpan workTimeSpan = new WorkTimeSpan();
-            translateWorkLoadDate(jsonObject,workTimeSpan);
+            translateWorkLoadDate(jsonObject);
         }
         return PageQueryResult.createResult(jsonArray, pageDesc);
     }
@@ -62,21 +61,19 @@ public class TaskInfoController extends BaseController {
     @RequestMapping(value = "/{taskId}", method = RequestMethod.GET)
     public JSONObject getTaskInfoByCode(@PathVariable String taskId) {
         TaskInfo taskInfo = taskInfoService.getTaskInfoByCode(taskId);
-        if (null == taskId){
+        if (null == taskId) {
             return new JSONObject();
         }
-        JSONObject jsonObject = (JSONObject)DictionaryMapUtils.objectToJSON(taskInfo);
-        WorkTimeSpan workTimeSpan = new WorkTimeSpan();
-        translateWorkLoadDate(jsonObject,workTimeSpan);
+        JSONObject jsonObject = (JSONObject) DictionaryMapUtils.objectToJSON(taskInfo);
+        translateWorkLoadDate(jsonObject);
         return jsonObject;
     }
-
 
 
     @ApiOperation(value = "保存任务信息", notes = "保存任务信息")
     @WrapUpResponseBody
     @RequestMapping(method = RequestMethod.POST)
-    public TaskInfo saveTaskInfo(@RequestBody TaskInfo taskInfo,HttpServletRequest request) {
+    public TaskInfo saveTaskInfo(@RequestBody TaskInfo taskInfo, HttpServletRequest request) {
         addUserInfoToTaskInfo(taskInfo, request);
         taskInfoService.saveTaskInfo(taskInfo);
         return taskInfo;
@@ -85,8 +82,8 @@ public class TaskInfoController extends BaseController {
     @ApiOperation(value = "修改任务信息", notes = "修改任务信息,同时会添加备注信息")
     @WrapUpResponseBody
     @RequestMapping(method = RequestMethod.PUT)
-    public ResponseData updateTaskInfo(@RequestBody TaskInfo taskInfo,HttpServletRequest request) {
-        if (StringUtils.isBlank(taskInfo.getTaskId())){
+    public ResponseData updateTaskInfo(@RequestBody TaskInfo taskInfo, HttpServletRequest request) {
+        if (StringUtils.isBlank(taskInfo.getTaskId())) {
             return ResponseData.makeErrorMessage("taskId不能为空");
         }
         addUserInfoToTaskInfo(taskInfo, request);
@@ -97,21 +94,31 @@ public class TaskInfoController extends BaseController {
     @ApiOperation(value = "删除任务信息", notes = "删除任务信息")
     @WrapUpResponseBody
     @RequestMapping(value = "/{taskId}", method = RequestMethod.DELETE)
-    public void deleteFlowRoleByCode(@PathVariable String taskId,HttpServletRequest request) {
+    public void deleteFlowRoleByCode(@PathVariable String taskId, HttpServletRequest request) {
         String userCode = WebOptUtils.getCurrentUserCode(request);
-        if (StringUtils.isBlank(userCode)){
+        if (StringUtils.isBlank(userCode)) {
             throw new ObjectException("您未登录");
         }
-        taskInfoService.deleteTaskInfoByCode(taskId,userCode);
+        taskInfoService.deleteTaskInfoByCode(taskId, userCode);
     }
+
+    @ApiOperation(value = "统计任务数", notes = "taskCount任务数,taskState状态,workload工作量")
+    @WrapUpResponseBody
+    @RequestMapping(value = "/stat-task", method = RequestMethod.GET)
+    public JSONArray countTaskInfo(HttpServletRequest request) {
+        Map<String, Object> filterMap = BaseController.collectRequestParameters(request);
+        return taskInfoService.statTaskInfo(filterMap);
+    }
+
 
     /**
      * 对TaskInfo转换的jsonObject对象中
      * workload和estimateWorkload进行翻译
-     * @param jsonObject 由TaskInfo转换而来的jsonObject对象
-     * @param workTimeSpan
+     *
+     * @param jsonObject   由TaskInfo转换而来的jsonObject对象
      */
-    private void translateWorkLoadDate(JSONObject jsonObject,WorkTimeSpan workTimeSpan) {
+    private void translateWorkLoadDate(JSONObject jsonObject) {
+        WorkTimeSpan workTimeSpan = new WorkTimeSpan();
         workTimeSpan.fromNumberAsMinute(jsonObject.getLongValue("workload"));
         jsonObject.put("workloadMinute", workTimeSpan.toStringAsMinute().toLowerCase());
         workTimeSpan.fromNumberAsMinute(jsonObject.getLongValue("estimateWorkload"));
@@ -120,6 +127,7 @@ public class TaskInfoController extends BaseController {
 
     /**
      * 在taskInfo中填充用户基本信息
+     *
      * @param taskInfo
      * @param request
      */
