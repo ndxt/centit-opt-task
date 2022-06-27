@@ -45,9 +45,13 @@ public class TaskInfoController extends BaseController {
     @WrapUpResponseBody
     @RequestMapping(method = RequestMethod.GET)
     public PageQueryResult listAllTaskInfo(PageDesc pageDesc, HttpServletRequest request) {
+        String topUnit=WebOptUtils.getCurrentTopUnit(request);
+        if (StringUtils.isBlank(topUnit)) {
+            throw new ObjectException("您未登录");
+        }
         Map<String, Object> filterMap = BaseController.collectRequestParameters(request);
+        filterMap.put("unitCode",topUnit);
         List<TaskInfo> listObjects = taskInfoService.listTaskInfos(filterMap, pageDesc);
-
         JSONArray jsonArray = DictionaryMapUtils.objectsToJSONArray(listObjects);
         for (Object object : jsonArray) {
             JSONObject jsonObject = (JSONObject) object;
@@ -106,7 +110,12 @@ public class TaskInfoController extends BaseController {
     @WrapUpResponseBody
     @RequestMapping(value = "/stat-task", method = RequestMethod.GET)
     public JSONArray countTaskInfo(HttpServletRequest request) {
+        String topUnit=WebOptUtils.getCurrentTopUnit(request);
+        if (StringUtils.isBlank(topUnit)) {
+            throw new ObjectException("您未登录");
+        }
         Map<String, Object> filterMap = BaseController.collectRequestParameters(request);
+        filterMap.put("unitCode",topUnit);
         return taskInfoService.statTaskInfo(filterMap);
     }
 
