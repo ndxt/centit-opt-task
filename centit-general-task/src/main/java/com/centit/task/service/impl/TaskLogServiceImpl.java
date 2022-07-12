@@ -1,5 +1,6 @@
 package com.centit.task.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.centit.support.common.ObjectException;
 import com.centit.support.database.utils.PageDesc;
 import com.centit.task.dao.TaskLogDao;
@@ -62,6 +63,11 @@ public class TaskLogServiceImpl implements TaskLogService {
         }
         taskInfoService.decrementWorkload(taskLog.getWorkload(),taskLog.getTaskId());
         taskLogDao.deleteObjectById(logId);
+    }
+
+    @Override
+    public JSONArray statTaskLog(Map<String, Object> filterMap) {
+        return taskLogDao.statTaskLog(filterMap);
     }
 
 }

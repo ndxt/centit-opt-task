@@ -88,4 +88,12 @@ public class TaskLogController extends BaseController {
         }
         taskLogService.deleteTaskLogByCode(logId,userCode);
     }
+
+    @ApiOperation(value = "工作量统计", notes = "工作量统计")
+    @WrapUpResponseBody
+    @RequestMapping(value="/stat", method = RequestMethod.GET)
+    public JSONArray statTaskLog(HttpServletRequest request) {
+        Map<String, Object> filterMap = BaseController.collectRequestParameters(request);
+        return taskLogService.statTaskLog(filterMap);
+    }
 }

@@ -1,5 +1,6 @@
 package com.centit.task.service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.centit.support.database.utils.PageDesc;
 import com.centit.task.po.TaskLog;
 
@@ -18,4 +19,5 @@ public interface TaskLogService {
     void saveTaskLog(TaskLog taskLog);
 
     void deleteTaskLogByCode(String logId,String userCode);
+    JSONArray statTaskLog(Map<String, Object> filterMap);
 }
