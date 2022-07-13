@@ -18,13 +18,17 @@ public interface TaskInfoService {
 
     void saveTaskInfo(TaskInfo taskInfo);
 
-    void deleteTaskInfoByCode(String taskId,String userCode);
+    void deleteTaskInfoByCode(String taskId, String userCode);
 
     void updateTaskInfo(TaskInfo taskInfo);
 
-    void incrementWorkload(long increment,String taskId);
+    void incrementWorkload(long increment, String taskId);
 
-    void decrementWorkload(long decrement,String taskId);
+    void decrementWorkload(long decrement, String taskId);
 
-   JSONArray statTaskInfo(Map<String,Object> filterMap);
+    JSONArray statTaskInfo(Map<String, Object> filterMap);
+
+    JSONArray statMember(Map<String, Object> filterMap);
+
+    JSONArray statPersonalTask(Map<String, Object> filterMap);
 }

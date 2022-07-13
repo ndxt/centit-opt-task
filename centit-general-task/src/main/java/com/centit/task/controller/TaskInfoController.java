@@ -118,6 +118,30 @@ public class TaskInfoController extends BaseController {
         filterMap.put("unitCode",topUnit);
         return taskInfoService.statTaskInfo(filterMap);
     }
+    @ApiOperation(value = "统计项目组成员任务数", notes = "taskCount任务数,taskState状态,workload工作量")
+    @WrapUpResponseBody
+    @RequestMapping(value = "/stat-member", method = RequestMethod.GET)
+    public JSONArray statMember(HttpServletRequest request) {
+        String topUnit=WebOptUtils.getCurrentTopUnit(request);
+        if (StringUtils.isBlank(topUnit)) {
+            throw new ObjectException("您未登录");
+        }
+        Map<String, Object> filterMap = BaseController.collectRequestParameters(request);
+        filterMap.put("unitCode",topUnit);
+        return taskInfoService.statMember(filterMap);
+    }
+    @ApiOperation(value = "统计个人项目任务数", notes = "taskCount任务数,taskState状态,workload工作量")
+    @WrapUpResponseBody
+    @RequestMapping(value = "/stat-personal-task", method = RequestMethod.GET)
+    public JSONArray statPersonalTask(HttpServletRequest request) {
+        String topUnit=WebOptUtils.getCurrentTopUnit(request);
+        if (StringUtils.isBlank(topUnit)) {
+            throw new ObjectException("您未登录");
+        }
+        Map<String, Object> filterMap = BaseController.collectRequestParameters(request);
+        filterMap.put("unitCode",topUnit);
+        return taskInfoService.statPersonalTask(filterMap);
+    }
 
 
     /**

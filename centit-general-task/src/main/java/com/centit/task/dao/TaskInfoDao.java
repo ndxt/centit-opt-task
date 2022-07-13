@@ -2,6 +2,7 @@ package com.centit.task.dao;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.centit.framework.components.CodeRepositoryUtil;
 import com.centit.framework.core.dao.CodeBook;
 import com.centit.framework.jdbc.dao.BaseDaoImpl;
 import com.centit.framework.jdbc.dao.DatabaseOptUtils;
@@ -18,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.sun.tools.classfile.Attribute.Code;
 
 /**
  * @author liu_cc
@@ -80,11 +83,74 @@ public class TaskInfoDao extends BaseDaoImpl<TaskInfo, String> {
             "[:taskReporter | and task_reporter=:taskReporter] [:osId | and os_id=:osId] " +
             "group by TASK_STATE";
         QueryAndNamedParams qap = QueryUtils.translateQuery(sql, filterMap);
-        JSONArray jsonArray = new JSONArray();
         WorkTimeSpan workTimeSpan = new WorkTimeSpan();
-        jsonArray = DatabaseOptUtils.listObjectsByNamedSqlAsJson(this, qap.getQuery(), qap.getParams());
+        JSONArray jsonArray = DatabaseOptUtils.listObjectsByNamedSqlAsJson(this, qap.getQuery(), qap.getParams());
         for (Object object : jsonArray) {
             JSONObject jsonObject = (JSONObject) object;
+            String taskState = jsonObject.getString("taskState");
+            int doWork = jsonObject.getIntValue("doWork");
+            int sumWork = jsonObject.getIntValue("sumWork");
+            switch (taskState) {
+                case "A":
+                    workTimeSpan.fromNumberAsMinute(sumWork);
+                    break;
+                case "B":
+                    workTimeSpan.fromNumberAsMinute(sumWork-doWork);
+                    break;
+                case "C":
+                    workTimeSpan.fromNumberAsMinute(doWork);
+                    break;
+                default:
+            }
+            jsonObject.put("workload", workTimeSpan.toStringAsMinute().toLowerCase());
+        }
+        return jsonArray;
+    }
+    public JSONArray statPersonalTask(Map<String, Object> filterMap) {
+        String sql = "SELECT os_id,task_state,count(0) task_count,sum(WORKLOAD) do_work,sum(ESTIMATE_WORKLOAD) sum_work FROM f_task_info where task_state in ('A','B','C')" +
+            "[:unitCode | and unit_code=:unitCode] " +
+            "[:taskOfficer | and task_officer=:taskOfficer] " +
+            "group by TASK_STATE,os_id";
+        QueryAndNamedParams qap = QueryUtils.translateQuery(sql, filterMap);
+        WorkTimeSpan workTimeSpan = new WorkTimeSpan();
+        JSONArray jsonArray = DatabaseOptUtils.listObjectsByNamedSqlAsJson(this, qap.getQuery(), qap.getParams());
+        for (Object object : jsonArray) {
+            JSONObject jsonObject = (JSONObject) object;
+            String osId = jsonObject.getString("osId");
+            String osName = CodeRepositoryUtil.getValue("osId",osId);
+            jsonObject.put("osName",osName);
+            String taskState = jsonObject.getString("taskState");
+            int doWork = jsonObject.getIntValue("doWork");
+            int sumWork = jsonObject.getIntValue("sumWork");
+            switch (taskState) {
+                case "A":
+                    workTimeSpan.fromNumberAsMinute(sumWork);
+                    break;
+                case "B":
+                    workTimeSpan.fromNumberAsMinute(sumWork-doWork);
+                    break;
+                case "C":
+                    workTimeSpan.fromNumberAsMinute(doWork);
+                    break;
+                default:
+            }
+            jsonObject.put("workload", workTimeSpan.toStringAsMinute().toLowerCase());
+        }
+        return jsonArray;
+    }
+    public JSONArray statMember(Map<String, Object> filterMap) {
+        String sql = "SELECT task_Officer,task_state,count(0) task_count,sum(WORKLOAD) do_work,sum(ESTIMATE_WORKLOAD) sum_work FROM f_task_info where task_state in ('A','B','C')" +
+            "[:unitCode | and unit_code=:unitCode] " +
+            "[:osId | and os_id=:osId] " +
+            "group by TASK_STATE,task_Officer";
+        QueryAndNamedParams qap = QueryUtils.translateQuery(sql, filterMap);
+        WorkTimeSpan workTimeSpan = new WorkTimeSpan();
+        JSONArray jsonArray = DatabaseOptUtils.listObjectsByNamedSqlAsJson(this, qap.getQuery(), qap.getParams());
+        for (Object object : jsonArray) {
+            JSONObject jsonObject = (JSONObject) object;
+            String userCode = jsonObject.getString("taskOfficer");
+            String userName = CodeRepositoryUtil.getValue("userCode",userCode);
+            jsonObject.put("userName",userName);
             String taskState = jsonObject.getString("taskState");
             int doWork = jsonObject.getIntValue("doWork");
             int sumWork = jsonObject.getIntValue("sumWork");
