@@ -6,6 +6,7 @@ import com.centit.framework.components.CodeRepositoryUtil;
 import com.centit.framework.core.dao.CodeBook;
 import com.centit.framework.jdbc.dao.BaseDaoImpl;
 import com.centit.framework.jdbc.dao.DatabaseOptUtils;
+import com.centit.support.algorithm.CollectionsOpt;
 import com.centit.support.common.WorkTimeSpan;
 import com.centit.support.database.utils.QueryAndNamedParams;
 import com.centit.support.database.utils.QueryUtils;
@@ -17,7 +18,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.sun.tools.classfile.Attribute.Code;
@@ -95,7 +98,7 @@ public class TaskInfoDao extends BaseDaoImpl<TaskInfo, String> {
                     workTimeSpan.fromNumberAsMinute(sumWork);
                     break;
                 case "B":
-                    workTimeSpan.fromNumberAsMinute(sumWork-doWork);
+                    workTimeSpan.fromNumberAsMinute(sumWork - doWork);
                     break;
                 case "C":
                     workTimeSpan.fromNumberAsMinute(doWork);
@@ -106,6 +109,7 @@ public class TaskInfoDao extends BaseDaoImpl<TaskInfo, String> {
         }
         return jsonArray;
     }
+
     public JSONArray statPersonalTask(Map<String, Object> filterMap) {
         String sql = "SELECT os_id,task_state,count(0) task_count,sum(WORKLOAD) do_work,sum(ESTIMATE_WORKLOAD) sum_work FROM f_task_info where task_state in ('A','B','C')" +
             "[:unitCode | and unit_code=:unitCode] " +
@@ -117,8 +121,8 @@ public class TaskInfoDao extends BaseDaoImpl<TaskInfo, String> {
         for (Object object : jsonArray) {
             JSONObject jsonObject = (JSONObject) object;
             String osId = jsonObject.getString("osId");
-            String osName = CodeRepositoryUtil.getValue("osId",osId);
-            jsonObject.put("osName",osName);
+            String osName = CodeRepositoryUtil.getValue("osId", osId);
+            jsonObject.put("osName", osName);
             String taskState = jsonObject.getString("taskState");
             int doWork = jsonObject.getIntValue("doWork");
             int sumWork = jsonObject.getIntValue("sumWork");
@@ -127,7 +131,7 @@ public class TaskInfoDao extends BaseDaoImpl<TaskInfo, String> {
                     workTimeSpan.fromNumberAsMinute(sumWork);
                     break;
                 case "B":
-                    workTimeSpan.fromNumberAsMinute(sumWork-doWork);
+                    workTimeSpan.fromNumberAsMinute(sumWork - doWork);
                     break;
                 case "C":
                     workTimeSpan.fromNumberAsMinute(doWork);
@@ -138,6 +142,7 @@ public class TaskInfoDao extends BaseDaoImpl<TaskInfo, String> {
         }
         return jsonArray;
     }
+
     public JSONArray statMember(Map<String, Object> filterMap) {
         String sql = "SELECT task_Officer,task_state,count(0) task_count,sum(WORKLOAD) do_work,sum(ESTIMATE_WORKLOAD) sum_work FROM f_task_info where task_state in ('A','B','C')" +
             "[:unitCode | and unit_code=:unitCode] " +
@@ -149,8 +154,8 @@ public class TaskInfoDao extends BaseDaoImpl<TaskInfo, String> {
         for (Object object : jsonArray) {
             JSONObject jsonObject = (JSONObject) object;
             String userCode = jsonObject.getString("taskOfficer");
-            String userName = CodeRepositoryUtil.getValue("userCode",userCode);
-            jsonObject.put("userName",userName);
+            String userName = CodeRepositoryUtil.getValue("userCode", userCode);
+            jsonObject.put("userName", userName);
             String taskState = jsonObject.getString("taskState");
             int doWork = jsonObject.getIntValue("doWork");
             int sumWork = jsonObject.getIntValue("sumWork");
@@ -159,7 +164,7 @@ public class TaskInfoDao extends BaseDaoImpl<TaskInfo, String> {
                     workTimeSpan.fromNumberAsMinute(sumWork);
                     break;
                 case "B":
-                    workTimeSpan.fromNumberAsMinute(sumWork-doWork);
+                    workTimeSpan.fromNumberAsMinute(sumWork - doWork);
                     break;
                 case "C":
                     workTimeSpan.fromNumberAsMinute(doWork);
@@ -167,6 +172,28 @@ public class TaskInfoDao extends BaseDaoImpl<TaskInfo, String> {
                 default:
             }
             jsonObject.put("workload", workTimeSpan.toStringAsMinute().toLowerCase());
+        }
+        return jsonArray;
+    }
+
+    public JSONObject statUnitTask(String topUnit) {
+        String sql = "select sum(if(radio>=0 and radio<25,1,0)) twenty,sum(if(radio>=25 and radio<75,1,0)) seventy,sum(if(radio>=75 and radio<100,1,0)) hundred,sum(if(radio>100,1,0)) over from (" +
+            "SELECT WORKLOAD*100/ESTIMATE_WORKLOAD radio FROM f_task_info where [:unitCode | unit_code=:unitCode]) a";
+        QueryAndNamedParams qap = QueryUtils.translateQuery(sql, CollectionsOpt.createHashMap("unitCode", topUnit));
+        return DatabaseOptUtils.getObjectBySqlAsJson(this, qap.getQuery(), qap.getParams());
+    }
+
+    public JSONArray statUnitPerson(String topUnit) {
+        String sql = "select TASK_OFFICER,sum(ESTIMATE_WORKLOAD) sum_workload from f_task_info "
+            + "where [:unitCode | unit_code=:unitCode] and task_state in ('A','B') " +
+            "group by TASK_OFFICER";
+        QueryAndNamedParams qap = QueryUtils.translateQuery(sql, CollectionsOpt.createHashMap("unitCode", topUnit));
+        JSONArray jsonArray = DatabaseOptUtils.listObjectsByNamedSqlAsJson(this, qap.getQuery(), qap.getParams());
+        for (Object object : jsonArray) {
+            JSONObject jsonObject = (JSONObject) object;
+            String userCode = jsonObject.getString("taskOfficer");
+            String userName = CodeRepositoryUtil.getValue("userCode", userCode);
+            jsonObject.put("userName", userName);
         }
         return jsonArray;
     }

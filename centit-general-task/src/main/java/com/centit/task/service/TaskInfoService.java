@@ -1,6 +1,7 @@
 package com.centit.task.service;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.centit.support.database.utils.PageDesc;
 import com.centit.task.po.TaskInfo;
 
@@ -31,4 +32,6 @@ public interface TaskInfoService {
     JSONArray statMember(Map<String, Object> filterMap);
 
     JSONArray statPersonalTask(Map<String, Object> filterMap);
+    JSONObject statUnitTask(String topUnit);
+    JSONArray statUnitPerson(String topUnit);
 }

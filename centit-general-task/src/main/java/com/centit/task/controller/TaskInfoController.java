@@ -142,7 +142,26 @@ public class TaskInfoController extends BaseController {
         filterMap.put("unitCode",topUnit);
         return taskInfoService.statPersonalTask(filterMap);
     }
-
+    @ApiOperation(value = "统计租户下项目分布", notes = "不需要参数")
+    @WrapUpResponseBody
+    @RequestMapping(value = "/stat-unit-task", method = RequestMethod.GET)
+    public JSONObject statUnitTask(HttpServletRequest request) {
+        String topUnit=WebOptUtils.getCurrentTopUnit(request);
+        if (StringUtils.isBlank(topUnit)) {
+            throw new ObjectException("您未登录");
+        }
+        return taskInfoService.statUnitTask(topUnit);
+    }
+    @ApiOperation(value = "统计租户下人员分布", notes = "不需要参数")
+    @WrapUpResponseBody
+    @RequestMapping(value = "/stat-unit-person", method = RequestMethod.GET)
+    public JSONArray statUnitPerson(HttpServletRequest request) {
+        String topUnit=WebOptUtils.getCurrentTopUnit(request);
+        if (StringUtils.isBlank(topUnit)) {
+            throw new ObjectException("您未登录");
+        }
+        return taskInfoService.statUnitPerson(topUnit);
+    }
 
     /**
      * 对TaskInfo转换的jsonObject对象中

@@ -22,10 +22,12 @@ public class WebInitializer implements WebApplicationInitializer {
             TaskSpringMvcConfig.class, SwaggerConfig.class);
 
         WebConfig.registerRequestContextListener(servletContext);
+        WebConfig.registerSingleSignOutHttpSessionListener(servletContext);
         WebConfig.registerCharacterEncodingFilter(servletContext, servletUrlPatterns);
         WebConfig.registerHttpPutFormContentFilter(servletContext, servletUrlPatterns);
         WebConfig.registerHiddenHttpMethodFilter(servletContext, servletUrlPatterns);
         WebConfig.registerRequestThreadLocalFilter(servletContext);
+        WebConfig.registerSpringSecurityFilter(servletContext, servletUrlPatterns);
     }
 
 }

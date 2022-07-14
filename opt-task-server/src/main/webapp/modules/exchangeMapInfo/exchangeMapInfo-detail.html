@@ -1,0 +1,181 @@
+<form class="form centit">
+    <input hidden type="text" name="mapInfoId" />
+	<div class="field" >
+		<label>交换名称：</label>
+		<input class="easyui-textbox" name="mapInfoName" type="text"/>
+	</div>
+	<div class="fields two">
+		<div class="field required">
+			<label>左（数据源）定义</label>
+			<div class="fields three">
+				<div class="field required">
+					<input class="easyui-textbox" id="sourceDatabaseName" name="sourceDatabaseName" type="text"/>
+					<input hidden id="sourceDatabaseCode" type="text"/>
+				</div>
+				<div class="field required">
+					<input class="easyui-textbox" id="sourceTableName" name="sourceTableName" type="text"/>
+				</div>
+				<div class="field required">
+					<a iconCls="icon-add"  class="easyui-linkbutton"
+					data-options="iconCls:'icon-add'" width="440" height="580" onclick="sourceDb()"></a>
+				</div>
+			</div>
+		</div>
+		<div class="field">
+			<label>右（数据目标）定义：</label>
+			<div class="fields three">
+				<div class="field required">
+					<input id="destDatabaseName" class="easyui-textbox" name="destDatabaseName" type="text" />
+					<input hidden id="destDatabaseCode" type="text" />
+				</div>
+				<div class="field required">
+					<input id="destTableName" class="easyui-textbox"  name="destTableName" type="text" />
+				</div>
+				<div class="field required">
+					<a iconCls="icon-add" class="easyui-linkbutton"
+					data-options="iconCls:'icon-add'" width="440" height="580"  onclick="destDb()"></a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="fields two">
+		<div class="field required">
+			<label>是否重复执行：</label>
+			<input type="radio" name="isRepeat" value="1">是</input>
+			<input type="radio" name="isRepeat" value="0">否</input>
+		</div>
+		<div class="field ">
+			<label>记录操作：</label>
+			<input type="radio" name="recordOperate" value="1">插入（insert）</input>
+			<input type="radio" name="recordOperate" value="2">更新（update）</input>
+			<input type="radio" name="recordOperate" value="3">合并（merge）</input>
+		</div>
+	</div>
+	<div class="field">
+		<div class="field ">
+			<label>交换说明：</label>
+			<input type="text" class="easyui-textbox" name="mapInfoDesc"  multiline="true" style="width:100%; height: 100px;"/>
+		</div>
+	</div>
+</form>
+
+<div class="easyui-tabs" style="width:97%;height:410px">
+	<div title="数据交换内容字段" class="tab1" style="padding:5px">
+		<div style="width:45%;float:left">
+			<table id="exchangeContent1" class="source"  style="width:100%;float:left"
+				   pagination="false"
+				   remoteSort="true"
+				   border="true"
+				   idField="cid"
+				   toolbar=".tab1-toolbar" >
+				<thead >
+					<th field="sourceFieldName" width="30%" data-options="editor: {type: 'text', options: {required: true}}">源字段名</th>
+					<th field="sourceFieldType" width="35%" data-options="editor: {type: 'text', options: {required: true}}">源字段类型</th>
+					<th field="sourceFieldSentence" width="35%" data-options="editor: {type: 'text', options: {required: true}}">源字段语句描述</th>
+				</thead>
+			</table>
+			<div class="tab1-toolbar">
+				<a rel="source_detail_add" iconCls="icon-add"
+				   target="custom" trigger="none" title="添加"  ><p>新增</p></a>
+				<hr>
+				<a rel="source_detail_remove" iconCls="icon-base icon-base-rubbish"
+				   target="custom" trigger="single" ><p>删除</p></a>
+			</div>
+		</div>
+		<div style="width:55%;float:right" >
+			<table id="exchangeContent2" class="dest" style="width:100%;"
+				   toolbar=".temp-toolbar"
+				   pagination="false"
+				   remoteSort="true"
+				   rownumbers="false"
+				   border="true"
+				   idField="cid">
+				<thead >
+					<th field="destFieldName" width="30%" data-options="editor: {type: 'text', options: {required: true}}">目标字段名</th>
+					<th field="destFieldType" width="30%" data-options="editor: {type: 'text', options: {required: true}}">字段类型</th>
+					<th field="isPk" width="10%" data-options="editor: {type: 'text', options: {required: true}}, formatter:isPK">主键</th>
+					<th field="isNull" width="15%" data-options="editor: {type: 'text', options: {required: true}}, formatter:isNULL">允许空</th>
+					<th field="destFieldDefault" width="20%" data-options="editor: {type: 'text', options: {required: true}}">默认值</th>
+				</thead>
+			</table>
+			<div class="temp-toolbar">
+				<a rel="dest_detail_add" iconCls="icon-add"
+				   target="custom" trigger="none" title="添加"  ><p>新增</p></a>
+				<hr>
+				<a rel="dest_detail_remove" iconCls="icon-base icon-base-rubbish "
+				   target="custom" trigger="single" ><p>删除</p></a>
+			</div>
+		</div>
+	</div>
+	<div title="数据交换触发器" class="tab2" style="padding:5px">
+		<table id="exchangeContent" class="trigger"  style="width:100%;"
+			   pagination="false"
+			   remoteSort="true"
+			   border="true"
+			   idField="cid"
+			   toolbar=".tab2-toolbar" >
+			<thead >
+				<th field="triggerSql" width="36%" >执行sql语句</th>
+				<th field="triggerDesc" width="20%" >执行语句说明</th>
+				<th field="triggerDatabase" width="10%" >执行对象</th>
+				<th field="triggerType" width="10%" >触发类别</th>
+				<th field="triggerTime" width="10%">触发时机</th>
+				<th field="isprocedure" width="10%">无参存储过程</th>
+			</thead>
+		</table>
+		<div class="tab2-toolbar">
+			<a iconCls="icon-add" href="modules/exchangeMapInfo/exchangeMapInfoTrigger-detail.html" trigger="none"
+				target="dialog" rel="exchangeMapInfoTrigger_add" title="新增" width="750" height="600" btnValue="新增">新增</a>
+			<hr>
+			<a iconCls="icon-edit" href="modules/exchangeMapInfo/exchangeMapInfoTrigger-detail.html" trigger="single"
+				target="dialog" rel="exchangeMapInfoTrigger_edit" title="编辑 {{text}}" width="750" height="600" btnValue="编辑">编辑</a>
+			<hr>
+			<a iconCls="icon-base icon-base-ban" trigger="single"
+				target="confirm" rel="exchangeMapInfoTrigger_remove" title="是否确定删除 {{text}}？">删除</a>
+		</div>
+	</div>
+</div>
+
+<div style="display: none;">
+	<div id="sourceDb" class="easyui-dialog"  style="width: 560px; height: 400px;" closed="true" buttons="#sourceDb-buttons">
+		<form>
+			<div style="padding:10px;">
+				<span>数据库:
+					<input class="easyui-combobox" id="txt_sourceDatabaseName" name="sourceDatabaseName" style="width:200px;" />
+				</span>
+				<span>表名:
+					<input class="easyui-combobox" id="txt_sourceTableName" name="sourceTableName" style="width:200px;" />
+				</span>
+	        </div>
+			<div style="padding:10px;">
+				<div class="field ">
+					<label>SQL：</label>
+					<input class="easyui-textbox" id="txt_querySql" name="querySql"  multiline="true" style="width:100%; height: 200px;"/>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div id="sourceDb-buttons">
+		<a href="javascript:void(0)" class="easyui-linkbutton" onclick="closeSourceDb();" iconcls="icon-remove" >取消</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" onclick="saveSourceDb();" iconcls="icon-save" >保存</a>
+	</div>
+</div>
+<div style="display: none;">
+	<div id="destDb" class="easyui-dialog"  style="width: 560px; height: 200px;" closed="true" buttons="#destDb-buttons">
+		<form>
+			<div style="padding:10px;">
+				<span>数据库:
+					<input class="easyui-combobox" id="txt_destDatabaseName" name="sourceDatabaseName" style="width:200px;" />
+				</span>
+				<span>表名:
+					<input class="easyui-combobox" id="txt_destTableName" name="txt_sourceTableName" style="width:200px;" />
+				</span>
+	        </div>
+		</form>
+	</div>
+	<div id="destDb-buttons">
+		<a href="javascript:void(0)" class="easyui-linkbutton" onclick="closeDestDb();" iconcls="icon-remove" >取消</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" onclick="saveDestDb();" iconcls="icon-save" >保存</a>
+	</div>
+</div>
+

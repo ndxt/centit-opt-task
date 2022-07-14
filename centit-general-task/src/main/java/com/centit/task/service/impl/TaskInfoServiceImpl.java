@@ -1,6 +1,7 @@
 package com.centit.task.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.centit.framework.components.CodeRepositoryUtil;
 import com.centit.framework.model.basedata.IDataDictionary;
 import com.centit.framework.model.basedata.IUserInfo;
@@ -224,5 +225,15 @@ public class TaskInfoServiceImpl implements TaskInfoService {
     @Override
     public JSONArray statPersonalTask(Map<String, Object> filterMap) {
         return taskInfoDao.statPersonalTask(filterMap);
+    }
+
+    @Override
+    public JSONObject statUnitTask(String topUnit) {
+        return taskInfoDao.statUnitTask(topUnit);
+    }
+
+    @Override
+    public JSONArray statUnitPerson(String topUnit) {
+        return taskInfoDao.statUnitPerson(topUnit);
     }
 }

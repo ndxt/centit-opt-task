@@ -1,0 +1,46 @@
+<form class="form centit">
+	<input hidden type="text" name="exportId" />
+	<div class="fields two">
+		<!--<div class="field required">
+			<label>数据处理操作ID：</label>
+			<input type="text" class="easyui-textbox" name="dataOptId" required />
+		</div>-->
+		<div class="field required">
+			<label>处理名称：</label>
+			<input type="text" class="easyui-textbox" name="optName" required />
+		</div>
+	</div>
+	<div class="field">
+		<label>处理说明：</label>
+		<input type="text" class="easyui-textbox" name="optDesc"  multiline="true" style="width:100%; height: 100px;"/>
+	</div>
+</form>
+<div class="easyui-tabs" style="height: 400px;">
+	<div title="数据导出内容字段">
+		<table id="dlgList5" class="tab1"  style="width:96%;"
+			   pagination="false"
+			   border="true" idField="cid"
+			   toolbar=".tab1-toolbar" >
+			<thead >
+				<th field="importName" width="24%" data-options="editor: {type: 'text', options: {required: true}}">导入名称</th>
+				<th field="importId" width="24%" data-options="editor: {type: 'text', options: {required: true}}">导入操作编号</th>
+				<th field="optType" width="15%" data-options="editor: {type: 'text', options: {required: true}}">操作类型</th>
+				<th field="mapinfoOrder" width="15%" data-options="editor: {type: 'text', options: {required: true}}">执行顺序</th>
+			</thead>
+		</table>
+    <div class="tab1-toolbar">
+      <a rel="dataOptInfo_ExchangeMapinfo_add" href="modules/dataOptInfo/dataOptInfo-exchangeMapinfo-add.html" iconCls="icon-add"
+         target="dialog" trigger="none" width="740" height="380" title="添加调用接口对应关系" ><p>添加调用接口对应关系</p></a>
+      <!--<hr>
+      <a rel="exportOpt_exportTrigger_add" iconCls="icon-edit"
+         target="custom" trigger="none" title="编辑"  ><p>编辑</p></a>-->
+      <hr>
+      <a rel="exportOpt_exportTrigger_remove" iconCls="icon-base icon-base-rubbish "
+         target="custom" trigger="single" ><p>删除</p></a>
+    </div>
+	</div>
+</div>
+
+<script>
+setI18NText();
+</script>
