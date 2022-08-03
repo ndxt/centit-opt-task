@@ -6,11 +6,10 @@
     <parent>
         <artifactId>centit-opt-task</artifactId>
         <groupId>com.centit.product</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>5.2-SNAPSHOT</version>
     </parent>
-
     <artifactId>opt-task-client</artifactId>
-    <version>1.0-SNAPSHOT</version>
+
     <dependencies>
         <dependency>
             <groupId>com.centit.product</groupId>
