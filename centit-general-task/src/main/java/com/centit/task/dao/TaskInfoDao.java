@@ -177,7 +177,7 @@ public class TaskInfoDao extends BaseDaoImpl<TaskInfo, String> {
     }
 
     public JSONObject statUnitTask(String topUnit) {
-        String sql = "select sum(if(radio>=0 and radio<25,1,0)) twenty,sum(if(radio>=25 and radio<75,1,0)) seventy,sum(if(radio>=75 and radio<100,1,0)) hundred,sum(if(radio>100,1,0)) over from (" +
+        String sql = "select sum(if(radio>=0 and radio<25,1,0)) twenty,sum(if(radio>=25 and radio<75,1,0)) seventy,sum(if(radio>=75 and radio<100,1,0)) hundred,sum(if(radio>100,1,0)) over_task from (" +
             "SELECT WORKLOAD*100/ESTIMATE_WORKLOAD radio FROM f_task_info where [:unitCode | unit_code=:unitCode]) a";
         QueryAndNamedParams qap = QueryUtils.translateQuery(sql, CollectionsOpt.createHashMap("unitCode", topUnit));
         return DatabaseOptUtils.getObjectBySqlAsJson(this, qap.getQuery(), qap.getParams());
