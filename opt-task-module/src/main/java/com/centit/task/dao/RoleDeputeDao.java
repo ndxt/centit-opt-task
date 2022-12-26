@@ -3,7 +3,6 @@ package com.centit.task.dao;
 import com.centit.framework.core.dao.CodeBook;
 import com.centit.framework.jdbc.dao.BaseDaoImpl;
 import com.centit.task.po.RoleDepute;
-import com.centit.task.po.TaskTransfer;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;

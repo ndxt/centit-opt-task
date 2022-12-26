@@ -11,19 +11,13 @@ import com.centit.support.common.WorkTimeSpan;
 import com.centit.support.database.utils.QueryAndNamedParams;
 import com.centit.support.database.utils.QueryUtils;
 import com.centit.task.po.TaskInfo;
-import org.apache.commons.collections4.MapUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import static com.sun.tools.classfile.Attribute.Code;
 
 /**
  * @author liu_cc
@@ -81,7 +75,8 @@ public class TaskInfoDao extends BaseDaoImpl<TaskInfo, String> {
     }
 
     public JSONArray statTaskInfo(Map<String, Object> filterMap) {
-        String sql = "SELECT task_state,count(0) task_count,sum(WORKLOAD) do_work,sum(ESTIMATE_WORKLOAD) sum_work FROM f_task_info where task_state in ('A','B','C')" +
+        String sql = "SELECT task_state,count(0) task_count,sum(WORKLOAD) do_work,sum(ESTIMATE_WORKLOAD) sum_work " +
+            "FROM f_task_info where task_state in ('A','B','C')" +
             "[:unitCode | and unit_code=:unitCode] [:taskOfficer | and task_officer=:taskOfficer]" +
             "[:taskReporter | and task_reporter=:taskReporter] [:osId | and os_id=:osId] " +
             "group by TASK_STATE";
@@ -111,7 +106,8 @@ public class TaskInfoDao extends BaseDaoImpl<TaskInfo, String> {
     }
 
     public JSONArray statPersonalTask(Map<String, Object> filterMap) {
-        String sql = "SELECT os_id,task_state,count(0) task_count,sum(WORKLOAD) do_work,sum(ESTIMATE_WORKLOAD) sum_work FROM f_task_info where task_state in ('A','B','C')" +
+        String sql = "SELECT os_id,task_state,count(0) task_count,sum(WORKLOAD) do_work,sum(ESTIMATE_WORKLOAD) sum_work " +
+            "FROM f_task_info where task_state in ('A','B','C')" +
             "[:unitCode | and unit_code=:unitCode] " +
             "[:taskOfficer | and task_officer=:taskOfficer] " +
             "group by TASK_STATE,os_id";
@@ -144,7 +140,8 @@ public class TaskInfoDao extends BaseDaoImpl<TaskInfo, String> {
     }
 
     public JSONArray statMember(Map<String, Object> filterMap) {
-        String sql = "SELECT task_Officer,task_state,count(0) task_count,sum(WORKLOAD) do_work,sum(ESTIMATE_WORKLOAD) sum_work FROM f_task_info where task_state in ('A','B','C')" +
+        String sql = "SELECT task_Officer,task_state,count(0) task_count,sum(WORKLOAD) do_work,sum(ESTIMATE_WORKLOAD) sum_work " +
+            "FROM f_task_info where task_state in ('A','B','C')" +
             "[:unitCode | and unit_code=:unitCode] " +
             "[:osId | and os_id=:osId] " +
             "group by TASK_STATE,task_Officer";
@@ -177,8 +174,9 @@ public class TaskInfoDao extends BaseDaoImpl<TaskInfo, String> {
     }
 
     public JSONObject statUnitTask(String topUnit) {
-        String sql = "select sum(if(radio>=0 and radio<25,1,0)) twenty,sum(if(radio>=25 and radio<75,1,0)) seventy,sum(if(radio>=75 and radio<100,1,0)) hundred,sum(if(radio>100,1,0)) over_task from (" +
-            "SELECT WORKLOAD*100/ESTIMATE_WORKLOAD radio FROM f_task_info where [:unitCode | unit_code=:unitCode]) a";
+        String sql = "select sum(if(radio>=0 and radio<25,1,0)) twenty,sum(if(radio>=25 and radio<75,1,0)) seventy, " +
+            "sum(if(radio>=75 and radio<100,1,0)) hundred,sum(if(radio>100,1,0)) over_task" +
+            " from ( SELECT WORKLOAD*100/ESTIMATE_WORKLOAD radio FROM f_task_info where [:unitCode | unit_code=:unitCode]) a";
         QueryAndNamedParams qap = QueryUtils.translateQuery(sql, CollectionsOpt.createHashMap("unitCode", topUnit));
         return DatabaseOptUtils.getObjectBySqlAsJson(this, qap.getQuery(), qap.getParams());
     }
