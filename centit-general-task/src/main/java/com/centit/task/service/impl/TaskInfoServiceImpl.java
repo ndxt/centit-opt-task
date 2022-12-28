@@ -189,7 +189,7 @@ public class TaskInfoServiceImpl implements TaskInfoService {
             }
             IUserInfo dbUserInfo = CodeRepositoryUtil.getUserInfoByCode(dbTaskInfo.getUnitCode(), dbTaskInfo.getTaskOfficer());
             IUserInfo taskInfoUserInfo = CodeRepositoryUtil.getUserInfoByCode(taskInfo.getUnitCode(), taskInfo.getUserCode());
-            String logContent = String.format(TASK_TRANSFER_TEMPLATE, taskInfoUserInfo.getUserName(), dbUserInfo.getUserName(), taskOfficerUserInfo.getUserName());
+            String logContent = String.format(TASK_TRANSFER_TEMPLATE, taskInfoUserInfo.getUserName(), dbUserInfo==null?"":dbUserInfo.getUserName(), taskOfficerUserInfo.getUserName());
             updateMemoTaskLog(taskInfo, logContent);
         }
 
