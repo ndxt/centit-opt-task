@@ -65,7 +65,7 @@ public class TaskInfoServiceImpl implements TaskInfoService {
     @Override
     @Transactional
     public List<TaskInfo> listTaskInfos(Map<String, Object> filterMap, PageDesc pageDesc) {
-        return taskInfoDao.listObjects(filterMap, pageDesc);
+        return taskInfoDao.listObjectsByProperties(filterMap, pageDesc);
     }
 
     @Override

@@ -64,7 +64,7 @@ public class UserTaskManagerImpl implements UserTaskManager {
     public List<UserTask> listUserTask(Map<String, Object> filterMap, PageDesc pageDesc) {
         filterMap.put("taskState", UserTask.TASK_STATE_ALLOCATED);
         filterMap.put(CodeBook.SELF_ORDER_BY, "assignTime desc");
-        return userTaskDao.listObjects(filterMap, pageDesc);
+        return userTaskDao.listObjectsByProperties(filterMap, pageDesc);
     }
 
     @Override
@@ -83,7 +83,7 @@ public class UserTaskManagerImpl implements UserTaskManager {
     public List<UserTask> listUserCompleteTask(Map<String, Object> filterMap, PageDesc pageDesc) {
         filterMap.put("taskState", UserTask.TASK_STATE_COMPLETED);
         filterMap.put(CodeBook.SELF_ORDER_BY, "assignTime desc");
-        return userTaskDao.listObjects(filterMap, pageDesc);
+        return userTaskDao.listObjectsByProperties(filterMap, pageDesc);
     }
 
     @Override
@@ -102,7 +102,7 @@ public class UserTaskManagerImpl implements UserTaskManager {
         filterMap.put("optTag", optTag);
         filterMap.put("taskState", UserTask.TASK_STATE_ALLOCATED);
         filterMap.put(CodeBook.SELF_ORDER_BY, "assignTime desc");
-        return userTaskDao.listObjects(filterMap);
+        return userTaskDao.listObjectsByProperties(filterMap);
     }
 
     @Override

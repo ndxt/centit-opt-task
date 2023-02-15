@@ -61,6 +61,6 @@ public class UserTaskDao extends BaseDaoImpl<UserTask, String> {
     }
 
     public Long countUserTask(Map<String, Object> filterMap) {
-        return Long.valueOf(this.countObject(filterMap));
+        return Long.valueOf(this.countObjectByProperties(filterMap));
     }
 }
