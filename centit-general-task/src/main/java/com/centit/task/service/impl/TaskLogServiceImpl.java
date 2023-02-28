@@ -1,6 +1,6 @@
 package com.centit.task.service.impl;
 
-import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson2.JSONArray;
 import com.centit.support.common.ObjectException;
 import com.centit.support.database.utils.PageDesc;
 import com.centit.task.dao.TaskLogDao;

@@ -1,7 +1,7 @@
 package com.centit.task.service.impl;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import com.centit.framework.components.CodeRepositoryUtil;
 import com.centit.framework.model.basedata.IDataDictionary;
 import com.centit.framework.model.basedata.IUserInfo;
