@@ -79,7 +79,7 @@ public class TaskInfoServiceImpl implements TaskInfoService {
     public void saveTaskInfo(TaskInfo taskInfo) {
         IUserInfo taskOfficerInfo = CodeRepositoryUtil.getUserInfoByCode(taskInfo.getUnitCode(), taskInfo.getTaskOfficer());
         if (null == taskOfficerInfo) {
-            throw new ObjectException("任务分配人信息有误");
+            throw new ObjectException("任务分配人信息有误, 租户代码："+taskInfo.getUnitCode()+" 分配人："+taskInfo.getTaskOfficer());
         }
         taskInfo.setWorkload(0L);
         taskInfoDao.mergeObject(taskInfo);
