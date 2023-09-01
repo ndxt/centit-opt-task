@@ -3,8 +3,8 @@ package com.centit.task.service.impl;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.centit.framework.components.CodeRepositoryUtil;
-import com.centit.framework.model.basedata.IDataDictionary;
-import com.centit.framework.model.basedata.IUserInfo;
+import com.centit.framework.model.basedata.DataDictionary;
+import com.centit.framework.model.basedata.UserInfo;
 import com.centit.support.algorithm.CollectionsOpt;
 import com.centit.support.common.ObjectException;
 import com.centit.support.database.utils.PageDesc;
@@ -77,13 +77,13 @@ public class TaskInfoServiceImpl implements TaskInfoService {
     @Override
     @Transactional
     public void saveTaskInfo(TaskInfo taskInfo) {
-        IUserInfo taskOfficerInfo = CodeRepositoryUtil.getUserInfoByCode(taskInfo.getUnitCode(), taskInfo.getTaskOfficer());
+        UserInfo taskOfficerInfo = CodeRepositoryUtil.getUserInfoByCode(taskInfo.getUnitCode(), taskInfo.getTaskOfficer());
         if (null == taskOfficerInfo) {
             throw new ObjectException("任务分配人信息有误, 租户代码："+taskInfo.getUnitCode()+" 分配人："+taskInfo.getTaskOfficer());
         }
         taskInfo.setWorkload(0L);
         taskInfoDao.mergeObject(taskInfo);
-        IUserInfo reporterNameInfo = CodeRepositoryUtil.getUserInfoByCode(taskInfo.getUnitCode(), taskInfo.getTaskReporter());
+        UserInfo reporterNameInfo = CodeRepositoryUtil.getUserInfoByCode(taskInfo.getUnitCode(), taskInfo.getTaskReporter());
         updateMemoTaskLog(taskInfo, String.format(TASK_CREATE_TEMPLATE, reporterNameInfo.getUserName(), taskOfficerInfo.getUserName()));
     }
 
@@ -173,29 +173,29 @@ public class TaskInfoServiceImpl implements TaskInfoService {
     private void appendSystemLog(TaskInfo taskInfo, TaskInfo dbTaskInfo) {
         if (isChange(taskInfo::getTaskState, dbTaskInfo.getTaskState())) {
             //任务状态发生改变
-            IUserInfo currentUserInfo = CodeRepositoryUtil.getUserInfoByCode(taskInfo.getUnitCode(), taskInfo.getUserCode());
+            UserInfo currentUserInfo = CodeRepositoryUtil.getUserInfoByCode(taskInfo.getUnitCode(), taskInfo.getUserCode());
             if (null == currentUserInfo) {
                 throw new ObjectException("当前用户信息有误");
             }
-            IDataDictionary taskStateDic = CodeRepositoryUtil.getDataPiece("taskState", taskInfo.getTaskState(), null);
+            DataDictionary taskStateDic = CodeRepositoryUtil.getDataPiece("taskState", taskInfo.getTaskState(), null);
             String taskStateText = null == taskStateDic ? taskInfo.getTaskState() : taskStateDic.getDataValue();
             updateMemoTaskLog(taskInfo, String.format(TASK_STATE_TEMPLATE, currentUserInfo.getUserName(), taskStateText));
         }
         if (isChange(taskInfo::getTaskOfficer, dbTaskInfo.getTaskOfficer())) {
             //任务分配人发生改变
-            IUserInfo taskOfficerUserInfo = CodeRepositoryUtil.getUserInfoByCode(taskInfo.getUnitCode(), taskInfo.getTaskOfficer());
+            UserInfo taskOfficerUserInfo = CodeRepositoryUtil.getUserInfoByCode(taskInfo.getUnitCode(), taskInfo.getTaskOfficer());
             if (null == taskOfficerUserInfo) {
                 throw new ObjectException(taskInfo.getTaskOfficer() + " 用户不存在!");
             }
-            IUserInfo dbUserInfo = CodeRepositoryUtil.getUserInfoByCode(dbTaskInfo.getUnitCode(), dbTaskInfo.getTaskOfficer());
-            IUserInfo taskInfoUserInfo = CodeRepositoryUtil.getUserInfoByCode(taskInfo.getUnitCode(), taskInfo.getUserCode());
+            UserInfo dbUserInfo = CodeRepositoryUtil.getUserInfoByCode(dbTaskInfo.getUnitCode(), dbTaskInfo.getTaskOfficer());
+            UserInfo taskInfoUserInfo = CodeRepositoryUtil.getUserInfoByCode(taskInfo.getUnitCode(), taskInfo.getUserCode());
             String logContent = String.format(TASK_TRANSFER_TEMPLATE, taskInfoUserInfo.getUserName(), dbUserInfo==null?"":dbUserInfo.getUserName(), taskOfficerUserInfo.getUserName());
             updateMemoTaskLog(taskInfo, logContent);
         }
 
         if (isChange(taskInfo::getTaskTitle, dbTaskInfo.getTaskTitle())) {
             //任务标题发生改变
-            IUserInfo currentUserInfo = CodeRepositoryUtil.getUserInfoByCode(taskInfo.getUnitCode(), taskInfo.getUserCode());
+            UserInfo currentUserInfo = CodeRepositoryUtil.getUserInfoByCode(taskInfo.getUnitCode(), taskInfo.getUserCode());
             if (null == currentUserInfo) {
                 throw new ObjectException(taskInfo.getTaskOfficer() + " 用户不存在!");
             }
@@ -204,7 +204,7 @@ public class TaskInfoServiceImpl implements TaskInfoService {
         }
         if (isChange(taskInfo::getTaskContent, dbTaskInfo.getTaskContent())) {
             //内容发生改变
-            IUserInfo currentUserInfo = CodeRepositoryUtil.getUserInfoByCode(taskInfo.getUnitCode(), taskInfo.getUserCode());
+            UserInfo currentUserInfo = CodeRepositoryUtil.getUserInfoByCode(taskInfo.getUnitCode(), taskInfo.getUserCode());
             if (null == currentUserInfo) {
                 throw new ObjectException(taskInfo.getTaskOfficer() + " 用户不存在!");
             }

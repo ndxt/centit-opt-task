@@ -7,20 +7,19 @@
     <parent>
         <artifactId>framework-snapshot-dependencies</artifactId>
         <groupId>com.centit.framework</groupId>
-        <version>5.3-SNAPSHOT</version>
+        <version>5.4-SNAPSHOT</version>
     </parent>
 
     <groupId>com.centit.product</groupId>
     <artifactId>centit-opt-task</artifactId>
     <packaging>pom</packaging>
-    <version>5.3-SNAPSHOT</version>
+    <version>5.4-SNAPSHOT</version>
     <modules>
         <module>opt-task-client</module>
         <module>opt-task-module</module>
         <module>opt-task-core</module>
         <module>centit-general-task</module>
     </modules>
-
 
     <build>
         <plugins>

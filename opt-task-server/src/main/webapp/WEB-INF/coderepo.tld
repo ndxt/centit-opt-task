@@ -91,14 +91,14 @@
         <description>get all user of one unit include not valid</description>
         <name>UNITUSER</name>
         <function-class>com.centit.framework.components.CodeRepositoryUtil</function-class>
-        <function-signature>List&lt;com.centit.framework.model.basedata.IUserInfo&gt; getSortedUnitUsers(java.lang.String)
+        <function-signature>List&lt;com.centit.framework.model.basedata.UserInfo&gt; getSortedUnitUsers(java.lang.String)
         </function-signature>
     </function>
     <function>
         <description>get all user of one unit include not valid</description>
         <name>ALLUSER</name>
         <function-class>com.centit.framework.components.CodeRepositoryUtil</function-class>
-        <function-signature>List&lt;com.centit.framework.model.basedata.IUserInfo&gt; getAllUsers(java.lang.String)</function-signature>
+        <function-signature>List&lt;com.centit.framework.model.basedata.UserInfo&gt; getAllUsers(java.lang.String)</function-signature>
     </function>
     <function>
         <description>get all vaild unit list</description>

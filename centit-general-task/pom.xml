@@ -5,18 +5,12 @@
     <parent>
         <artifactId>centit-opt-task</artifactId>
         <groupId>com.centit.product</groupId>
-        <version>5.3-SNAPSHOT</version>
+        <version>5.4-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>centit-general-task</artifactId>
 
     <dependencies>
-
-<!--        <dependency>-->
-<!--            <groupId>com.centit.product</groupId>-->
-<!--            <artifactId>opt-task-core</artifactId>-->
-<!--            <version>${project.version}</version>-->
-<!--        </dependency>-->
 
         <dependency>
             <groupId>com.centit.framework</groupId>
