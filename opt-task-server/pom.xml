@@ -28,6 +28,12 @@
             <version>${revision}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.centit.framework</groupId>
+            <artifactId>framework-dubbo-config</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
         <!--添加dubbo-clien 服务依赖，远程调用平台接口-->
         <dependency>
             <groupId>com.centit.framework</groupId>
