@@ -12,6 +12,7 @@ import com.centit.framework.dubbo.config.IpServerDubboClientConfig;
 import com.centit.framework.jdbc.config.JdbcConfig;
 import com.centit.framework.model.adapter.NotificationCenter;
 import com.centit.framework.security.StandardPasswordEncoderImpl;
+import org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
@@ -32,6 +33,11 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 @EnableNacosConfig(globalProperties = @NacosProperties(serverAddr = "${nacos.server-addr}"))
 @NacosPropertySource(dataId = "${nacos.system-dataid}",groupId = "CENTIT", autoRefreshed = true)
 public class ServiceConfig {
+
+    @Bean
+    public AutowiredAnnotationBeanPostProcessor autowiredAnnotationBeanPostProcessor(){
+        return new AutowiredAnnotationBeanPostProcessor();
+    }
 
     @Bean(name = "passwordEncoder")
     public StandardPasswordEncoderImpl centitPasswordEncoder() {
