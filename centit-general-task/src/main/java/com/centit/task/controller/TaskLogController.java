@@ -8,7 +8,7 @@ import com.centit.framework.core.controller.WrapUpResponseBody;
 import com.centit.framework.core.dao.DictionaryMapUtils;
 import com.centit.framework.core.dao.PageQueryResult;
 import com.centit.support.common.ObjectException;
-import com.centit.support.common.WorkTimeSpan;
+import com.centit.support.common.DateTimeSpan;
 import com.centit.support.database.utils.PageDesc;
 import com.centit.task.po.TaskLog;
 import com.centit.task.service.TaskLogService;
@@ -53,9 +53,9 @@ public class TaskLogController extends BaseController {
             if ("system".equals(jsonObject.getString("userCode"))){
                 jsonObject.put("userName","系统日志");
             }
-            WorkTimeSpan workTimeSpan = new WorkTimeSpan();
-            workTimeSpan.fromNumberAsMinute(jsonObject.getLongValue("workload"));
-            jsonObject.put("workloadMinute",workTimeSpan.toStringAsMinute().toLowerCase());
+            DateTimeSpan DateTimeSpan = new DateTimeSpan();
+            DateTimeSpan.fromNumberAsMinute(jsonObject.getLongValue("workload"));
+            jsonObject.put("workloadMinute",DateTimeSpan.toStringAsMinute().toLowerCase());
         }
         return PageQueryResult.createResult(jsonArray, pageDesc);
     }
