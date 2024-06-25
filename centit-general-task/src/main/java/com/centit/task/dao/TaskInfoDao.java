@@ -7,7 +7,7 @@ import com.centit.framework.core.dao.CodeBook;
 import com.centit.framework.jdbc.dao.BaseDaoImpl;
 import com.centit.framework.jdbc.dao.DatabaseOptUtils;
 import com.centit.support.algorithm.CollectionsOpt;
-import com.centit.support.common.WorkTimeSpan;
+import com.centit.support.common.DateTimeSpan;
 import com.centit.support.database.utils.QueryAndNamedParams;
 import com.centit.support.database.utils.QueryUtils;
 import com.centit.task.po.TaskInfo;
@@ -81,7 +81,7 @@ public class TaskInfoDao extends BaseDaoImpl<TaskInfo, String> {
             "[:taskReporter | and task_reporter=:taskReporter] [:osId | and os_id=:osId] " +
             "group by TASK_STATE";
         QueryAndNamedParams qap = QueryUtils.translateQuery(sql, filterMap);
-        WorkTimeSpan workTimeSpan = new WorkTimeSpan();
+        DateTimeSpan DateTimeSpan = new DateTimeSpan();
         JSONArray jsonArray = DatabaseOptUtils.listObjectsByNamedSqlAsJson(this, qap.getQuery(), qap.getParams());
         for (Object object : jsonArray) {
             JSONObject jsonObject = (JSONObject) object;
@@ -90,17 +90,17 @@ public class TaskInfoDao extends BaseDaoImpl<TaskInfo, String> {
             int sumWork = jsonObject.getIntValue("sumWork");
             switch (taskState) {
                 case "A":
-                    workTimeSpan.fromNumberAsMinute(sumWork);
+                    DateTimeSpan.fromNumberAsMinute(sumWork);
                     break;
                 case "B":
-                    workTimeSpan.fromNumberAsMinute(sumWork - doWork);
+                    DateTimeSpan.fromNumberAsMinute(sumWork - doWork);
                     break;
                 case "C":
-                    workTimeSpan.fromNumberAsMinute(doWork);
+                    DateTimeSpan.fromNumberAsMinute(doWork);
                     break;
                 default:
             }
-            jsonObject.put("workload", workTimeSpan.toStringAsMinute().toLowerCase());
+            jsonObject.put("workload", DateTimeSpan.toStringAsMinute().toLowerCase());
         }
         return jsonArray;
     }
@@ -112,7 +112,7 @@ public class TaskInfoDao extends BaseDaoImpl<TaskInfo, String> {
             "[:taskOfficer | and task_officer=:taskOfficer] " +
             "group by TASK_STATE,os_id";
         QueryAndNamedParams qap = QueryUtils.translateQuery(sql, filterMap);
-        WorkTimeSpan workTimeSpan = new WorkTimeSpan();
+        DateTimeSpan DateTimeSpan = new DateTimeSpan();
         JSONArray jsonArray = DatabaseOptUtils.listObjectsByNamedSqlAsJson(this, qap.getQuery(), qap.getParams());
         for (Object object : jsonArray) {
             JSONObject jsonObject = (JSONObject) object;
@@ -124,17 +124,17 @@ public class TaskInfoDao extends BaseDaoImpl<TaskInfo, String> {
             int sumWork = jsonObject.getIntValue("sumWork");
             switch (taskState) {
                 case "A":
-                    workTimeSpan.fromNumberAsMinute(sumWork);
+                    DateTimeSpan.fromNumberAsMinute(sumWork);
                     break;
                 case "B":
-                    workTimeSpan.fromNumberAsMinute(sumWork - doWork);
+                    DateTimeSpan.fromNumberAsMinute(sumWork - doWork);
                     break;
                 case "C":
-                    workTimeSpan.fromNumberAsMinute(doWork);
+                    DateTimeSpan.fromNumberAsMinute(doWork);
                     break;
                 default:
             }
-            jsonObject.put("workload", workTimeSpan.toStringAsMinute().toLowerCase());
+            jsonObject.put("workload", DateTimeSpan.toStringAsMinute().toLowerCase());
         }
         return jsonArray;
     }
@@ -146,7 +146,7 @@ public class TaskInfoDao extends BaseDaoImpl<TaskInfo, String> {
             "[:osId | and os_id=:osId] " +
             "group by TASK_STATE,task_Officer";
         QueryAndNamedParams qap = QueryUtils.translateQuery(sql, filterMap);
-        WorkTimeSpan workTimeSpan = new WorkTimeSpan();
+        DateTimeSpan DateTimeSpan = new DateTimeSpan();
         JSONArray jsonArray = DatabaseOptUtils.listObjectsByNamedSqlAsJson(this, qap.getQuery(), qap.getParams());
         for (Object object : jsonArray) {
             JSONObject jsonObject = (JSONObject) object;
@@ -158,17 +158,17 @@ public class TaskInfoDao extends BaseDaoImpl<TaskInfo, String> {
             int sumWork = jsonObject.getIntValue("sumWork");
             switch (taskState) {
                 case "A":
-                    workTimeSpan.fromNumberAsMinute(sumWork);
+                    DateTimeSpan.fromNumberAsMinute(sumWork);
                     break;
                 case "B":
-                    workTimeSpan.fromNumberAsMinute(sumWork - doWork);
+                    DateTimeSpan.fromNumberAsMinute(sumWork - doWork);
                     break;
                 case "C":
-                    workTimeSpan.fromNumberAsMinute(doWork);
+                    DateTimeSpan.fromNumberAsMinute(doWork);
                     break;
                 default:
             }
-            jsonObject.put("workload", workTimeSpan.toStringAsMinute().toLowerCase());
+            jsonObject.put("workload", DateTimeSpan.toStringAsMinute().toLowerCase());
         }
         return jsonArray;
     }

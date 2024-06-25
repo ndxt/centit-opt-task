@@ -9,7 +9,7 @@ import com.centit.framework.core.controller.WrapUpResponseBody;
 import com.centit.framework.core.dao.DictionaryMapUtils;
 import com.centit.framework.core.dao.PageQueryResult;
 import com.centit.support.common.ObjectException;
-import com.centit.support.common.WorkTimeSpan;
+import com.centit.support.common.DateTimeSpan;
 import com.centit.support.database.utils.PageDesc;
 import com.centit.task.po.TaskInfo;
 import com.centit.task.service.TaskInfoService;
@@ -170,11 +170,11 @@ public class TaskInfoController extends BaseController {
      * @param jsonObject   由TaskInfo转换而来的jsonObject对象
      */
     private void translateWorkLoadDate(JSONObject jsonObject) {
-        WorkTimeSpan workTimeSpan = new WorkTimeSpan();
-        workTimeSpan.fromNumberAsMinute(jsonObject.getLongValue("workload"));
-        jsonObject.put("workloadMinute", workTimeSpan.toStringAsMinute().toLowerCase());
-        workTimeSpan.fromNumberAsMinute(jsonObject.getLongValue("estimateWorkload"));
-        jsonObject.put("estimateWorkloadMinute", workTimeSpan.toStringAsMinute().toLowerCase());
+        DateTimeSpan DateTimeSpan = new DateTimeSpan();
+        DateTimeSpan.fromNumberAsMinute(jsonObject.getLongValue("workload"));
+        jsonObject.put("workloadMinute", DateTimeSpan.toStringAsMinute().toLowerCase());
+        DateTimeSpan.fromNumberAsMinute(jsonObject.getLongValue("estimateWorkload"));
+        jsonObject.put("estimateWorkloadMinute", DateTimeSpan.toStringAsMinute().toLowerCase());
     }
 
     /**

@@ -5,7 +5,7 @@
     <parent>
         <artifactId>centit-opt-task</artifactId>
         <groupId>com.centit.product</groupId>
-        <version>5.4.240119</version>
+        <version>5.5-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -25,6 +25,12 @@
         <dependency>
             <groupId>com.centit.framework</groupId>
             <artifactId>framework-session-redis</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.centit.framework</groupId>
+            <artifactId>framework-dubbo-config</artifactId>
             <version>${revision}</version>
         </dependency>
 
