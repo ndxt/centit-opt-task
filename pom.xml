@@ -22,7 +22,7 @@
     </modules>
 
     <properties>
-        <revision>0.0.1-SNAPSHOT</revision>
+        <revision>5.5.240617-SNAPSHOT</revision>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
