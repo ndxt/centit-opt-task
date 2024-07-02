@@ -30,7 +30,6 @@ public class UserTaskDao extends BaseDaoImpl<UserTask, String> {
         filterField.put("roleCode", CodeBook.EQUAL_HQL_ID);
         filterField.put("taskState", CodeBook.EQUAL_HQL_ID);
         filterField.put(CodeBook.SELF_ORDER_BY, " assignTime desc ");
-        filterField.put(CodeBook.ORDER_BY_HQL_ID, " assignTime desc ");
         return filterField;
     }
 
