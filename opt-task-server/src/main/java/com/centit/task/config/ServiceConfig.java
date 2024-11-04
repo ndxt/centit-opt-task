@@ -16,20 +16,21 @@ import org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostP
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 @Configuration
 @PropertySource("classpath:system.properties")
-@ComponentScan(basePackages = {"com.centit"},
-    excludeFilters = @ComponentScan.Filter(value = org.springframework.stereotype.Controller.class))
-
+@EnableWebSecurity
 @Import({
     DubboConfig.class,
     IpServerDubboClientConfig.class,
     JdbcConfig.class,
     SpringSecurityDaoConfig.class})
+@ComponentScan(basePackages = {"com.centit"},
+    excludeFilters = @ComponentScan.Filter(value = org.springframework.stereotype.Controller.class))
 @EnableNacosConfig(globalProperties = @NacosProperties(serverAddr = "${nacos.server-addr}"))
 @NacosPropertySource(dataId = "${nacos.system-dataid}",groupId = "CENTIT", autoRefreshed = true)
 public class ServiceConfig {
