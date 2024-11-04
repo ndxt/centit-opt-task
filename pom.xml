@@ -13,7 +13,7 @@
     <groupId>com.centit.product</groupId>
     <artifactId>centit-opt-task</artifactId>
     <packaging>pom</packaging>
-    <version>${revision}</version>
+    <version>5.5-SNAPSHOT</version>
     <modules>
         <module>opt-task-client</module>
         <module>opt-task-module</module>
